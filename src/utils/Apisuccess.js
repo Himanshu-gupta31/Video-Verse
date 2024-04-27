@@ -10,3 +10,4 @@ class Apisuccess{
        this.success= statusCode<400
     }
 }
+export {Apisuccess}
