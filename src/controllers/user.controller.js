@@ -4,8 +4,8 @@ import {User} from "../models/user.model.js"
 import {uploadOncloudinary} from "../utils/Cloudinary.js"
 import { Apisuccess } from "../utils/Apisuccess.js";
 const registerUser=asyncHandler(async(req,res)=>{
-   const {fullname,email,username} =req.body
-   console.log("email:",email)
+   const {fullname,email,username,password} =req.body
+   
    if(fullname === ""){
        throw new Apierror(400,"Fullname is required")
    }
@@ -15,14 +15,20 @@ const registerUser=asyncHandler(async(req,res)=>{
    if(username===""){
        throw new Apierror(400,"username is required")
    }
-   const existeduser=User.findOne({
+   if(password===""){
+    throw new Apierror(400,"password is required")
+   }
+   const existeduser= await User.findOne({
     $or:[{username},{email}]
    })
    if(existeduser){
     throw new Apierror(409,"User already exists ")
    }
     const avatarlocalpath= req.files?.avatar[0]?.path;
-    const coverimagelocalpath=req.files?.coverimage[0]?.path; 
+    let coverimagelocalpath;
+    if(req.files && Array.isArray(req.files.coverimage) && req.files.coverimage.length>0  ){
+        coverimagelocalpath=req.files. coverimage[0].path
+    }
     if(!avatarlocalpath){
         throw new Apierror(400,"Avatar file is compulsory ")
     }
