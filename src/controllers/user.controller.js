@@ -155,6 +155,79 @@ const refreshaccesstoken=asyncHandler(async(req,res)=>{
    } catch (error) {
      throw new Apierror(401,error?.message || "Invalid refresh token")
    }
-   
 })
-export {registerUser,loginUser,logoutuser,refreshaccesstoken}
+const changepassword=asyncHandler(async(req,res)=>{
+    const {oldpassword,newpassword}=req.body
+     const user=await User.findById(req.user?._id)
+      const correctpassword=await user.isPasswordCorrect(oldpassword)
+      if(!correctpassword){
+        throw new Apierror(400,"Password entered is wrong")
+      }
+      user.password=newpassword
+      await user.save({ValidationBeforeSave:false})//save isliye kara hai kyunki user model mein pre use kara hai uske baad apne save use kara hai and use.password is value enter hogi but woh hook .save se run hoga and validatiobeforesave ka matlab hota ki aur koi validation naa check kare jaise email and username check karna
+      return res.status(200)
+      .json(new Apisuccess(200,{},"Password changes successfully "))
+})
+const getcurrentuser=asyncHandler(async(req,res)=>{
+    return res.status(200)
+    .json(200,req.user,"Current user fetched successfully")
+})
+const updatenameandemail=asyncHandler(async(req,res)=>{
+    const {fullname,email}=req.body
+    if(!fullname || !email){
+        throw new Apierror(400,"Fields provided are empty")
+    }
+    const user= await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                fullname:fullname,
+                email:email
+            }
+        },{new:true}
+    ).select("-password")
+    return res.status(200)
+    .json(200,user,"Accounts details updated successfully ")
+})
+const changeavatar=asyncHandler(async(req,res)=>{
+    const avatarlocalpath=req.file?.path
+    if(!avatarlocalpath){
+        throw new Apierror(400,"Avatar file is missing")
+    }
+    const avatar=await uploadOncloudinary(avatarlocalpath)
+    if(!avatar.url){
+        throw new Apierror(400,"Error while uploading avatar ")
+    }
+    const user= await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                avatar:avatar.url//.url isliye le rahe kyunki agar avatar liya toh woh poora object milega but hume bass strong chahiye aka the url
+            }      
+        },{new:true }//new isliye use karte kyunki update hone ke baad jo result hota woh return hota phir
+    ).select("-password")
+    return res.status(200)
+    .json (new Apisuccess(200,user,"Avatar successfully changes")) 
+
+})
+const changecoverimage=asyncHandler(async(req,res)=>{
+    coverimagelocalpath=req.file?.path
+    if(!coverimagelocalpath){
+        throw new Apierror(400,"Cover image is missing")
+    }
+    const coverimage= await uploadOncloudinary(coverimagelocalpath)
+    if(!coverimage){
+        throw new Apierror(400,"Error while uploading cover image")
+    }
+    const user=await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set:{
+                coverimage:coverimage.url
+            }
+        },{new:true}
+    ).select("-password")
+    return res.status(200)
+    .json (new Apisuccess(200,user,"Cover image uploaded successfully"))
+})
+export {registerUser,loginUser,logoutuser,refreshaccesstoken,changepassword,getcurrentuser,updatenameandemail,changeavatar,changecoverimage}
