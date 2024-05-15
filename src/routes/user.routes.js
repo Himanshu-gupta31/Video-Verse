@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginUser, logoutuser, registerUser,refreshaccesstoken } from "../controllers/user.controller.js";
+import { loginUser, logoutuser, registerUser,refreshaccesstoken, changepassword, getcurrentuser, updatenameandemail, changeavatar, changecoverimage, getuserchannelprofile, watchhistory } from "../controllers/user.controller.js";
 import {upload} from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/Auth.middleware.js";
 const router=Router()
@@ -20,4 +20,11 @@ router.route("/login").post(loginUser)
 //secured route
 router.route("/logout").post(verifyJWT,logoutuser)
 router.route("/refreshtoken").post(refreshaccesstoken)
+router.route("/changepassword").post(verifyJWT,changepassword)
+router.route("/getcurrentuser").get(verifyJWT,getcurrentuser)
+router.route("/updatedetails").patch(verifyJWT,updatenameandemail) //patch isliye use karte kyunki agar post karenge toh saari details update ho jaayegi post mein toh 
+router.route("/changeavatar").patch (verifyJWT,upload.single("avatar"),changeavatar)
+router.route("/changecoverimage").patch(verifyJWT,upload.single("coverimage"),changecoverimage)
+router.route("/c/:username").get(verifyJWT,getuserchannelprofile)
+router.route("/history").get(verifyJWT,watchhistory)
 export default router
