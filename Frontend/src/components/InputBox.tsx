@@ -12,8 +12,7 @@ export const InputBox:React.FC<InputBoxProps>=({
     type,
     inputOnChange,
     className
-
-
+    
 }) => {
     return(
         <>
@@ -23,6 +22,7 @@ export const InputBox:React.FC<InputBoxProps>=({
             placeholder={inputPlaceholder}
             className={className}
             onChange={inputOnChange}
+            required
             ></input>
             
         </div>
