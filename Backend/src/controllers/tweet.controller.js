@@ -33,6 +33,15 @@ const updatetweet=asyncHandler(async(req,res)=>{
     if(!content && content.trim().length===0){
         throw new ApiError(400,"Content field is empty")
     }
+    const newtweet = await Tweet.findById(tweetId);
+
+    if (!newtweettweet) {
+        throw new ApiError(404, "Tweet not found");
+    }
+
+    if (newtweet?.owner.toString() !== req.user?._id.toString()) {
+        throw new ApiError(400, "only owner can edit thier tweet");
+    }
     const tweet=await Tweet.findByIdAndUpdate(
         tweetId,
         {
@@ -52,18 +61,22 @@ const deletetweet=asyncHandler(async(req,res)=>{
     if (!mongoose.isValidObjectId(tweetId)) {
         throw new ApiError(400, "Invalid tweet ID");
     }
-    const tweet=await Tweet.findByIdAndDelete(
-        tweetId,
-        {
-            $unset:{
-                content:1
-            }
-        },{new:true}
-    )
+    const tweet = await Tweet.findById(tweetId);
+
+    if (!tweet) {
+        throw new ApiError(404, "Tweet not found");
+    }
+
+    if (tweet?.owner.toString() !== req.user?._id.toString()) {
+        throw new ApiError(400, "only owner can edit thier tweet");
+    }
+    await Tweet.findByIdAndDelete(tweetId)
+    
     if(!tweet){
         throw new ApiError(500,"Try again later")
     }
     return res.status(200)
-    .json(new Apisuccess(200,"Tweet deleted successfully",tweet))
+    .json(new Apisuccess(200,"Tweet deleted successfully",{}))
 })
+//getalltweet
 export {createtweet,updatetweet,deletetweet}
