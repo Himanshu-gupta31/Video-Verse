@@ -78,5 +78,6 @@ const deletetweet=asyncHandler(async(req,res)=>{
     return res.status(200)
     .json(new Apisuccess(200,"Tweet deleted successfully",{}))
 })
+
 //getalltweet
 export {createtweet,updatetweet,deletetweet}
