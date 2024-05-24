@@ -93,5 +93,57 @@ const getplaylistbyid=asyncHandler(async(req,res)=>{
       return res.status(200)
       .json(new Apisuccess(200,"Playlist found",{playlist}))
 })
-
-export default {createplaylist,updateplaylist,deleteplaylist,getuserplaylist,getplaylistbyid}
+const addVideoToPlaylist=asyncHandler(async(req,res)=>{
+    const {playlistId,videoId}=req.params
+    if(!isValidObjectId(playlistId)){
+        throw new Apierror(400,"Invalid playlist id")
+      
+    }
+    if(!isValidObjectId(videoId)){
+        throw new Apierror(400,"Invalid video id")
+    }
+    const playlist=await Playlist.findById(playlistId)
+    if(playlist?.owner.toString()!==req.user?._id){
+        throw new Apierror(400,"Only the valid user can add videos to the playlist")
+    }
+    const updatedplaylist=await Playlist.findByIdAndUpdate(
+        playlistId,
+        {
+            $push:{
+                videos:videoId
+            }
+        },{new:true}
+    )
+    if(!updatedplaylist){
+        throw new Apierror(404,"Video couldnt be added to the playlist")
+    }
+    return res.status(200)
+    .json(new Apisuccess(200,"Video added to the playlist successfully",{}))
+})
+const removevideofromplaylist=asyncHandler(async(req,res)=>{
+    const {playlistId,videoId}=req.params
+    if(!isValidObjectId(playlistId)){
+        throw new Apierror(400,"Invalid playlist id")
+    }
+    if(!isValidObjectId(videoId)){
+        throw new Apierror(400,"Invalid video id")
+    }
+    const playlist=await Playlist.findById(playlistId)
+    if(playlist?.owner.toString()!==req.user?._id.toString()){
+        throw new Apierror(404,"Only the valid user can delete video from playlist")
+    }
+    const deletevideo=await Playlist.findByIdAndUpdate(
+        playlistId,
+        {
+            $pull:{
+                videos:videoId
+            }
+        },{new:true}
+    )
+    if(!deletevideo){
+        throw new Apierror(404,"Video couldnt be removed to the playlist")
+    }
+    return res.status(200)
+    .json(new Apisuccess(200,"Video removed from the playlist successfully",{deletevideo}))
+})
+export default {createplaylist,updateplaylist,deleteplaylist,getuserplaylist,getplaylistbyid,addVideoToPlaylist,removevideofromplaylist}
