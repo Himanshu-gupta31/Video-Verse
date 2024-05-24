@@ -1,10 +1,10 @@
-import { asyncHandler } from "../utils/asyncHandler";
-import { Apierror } from "../utils/ApiError";
-import { Apisuccess } from "../utils/Apisuccess";
-import {Video} from "../models/video.model"
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { Apierror } from "../utils/ApiError.js";
+import { Apisuccess } from "../utils/Apisuccess.js";
+import {Video} from "../models/video.model.js"
 import { mongoose } from "mongoose";
 const getChannelStatus = asyncHandler(async (req, res) => {
-    const userId = req.body?._id;
+    const userId = req.user?._id;
   
     if (!userId) {
       throw new Apierror('User ID is required', 400);

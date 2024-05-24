@@ -1,9 +1,9 @@
-import { Apierror } from "../utils/ApiError";
-import { Apisuccess } from "../utils/Apisuccess";
-import { Comment } from "../models/comment.model";
+import { Apierror } from "../utils/ApiError.js";
+import { Apisuccess } from "../utils/Apisuccess.js";
+import { Comment } from "../models/comment.model.js";
 import mongoose from "mongoose";
-import { asyncHandler } from "../utils/asyncHandler";
-import {Video} from "../models/video.model"
+import { asyncHandler } from "../utils/asyncHandler.js";
+import {Video} from "../models/video.model.js"
 
 const addComment=asyncHandler(async(req,res)=>{
     const {videoId} = req.params
@@ -15,7 +15,7 @@ const addComment=asyncHandler(async(req,res)=>{
     const comment=await Comment.create({
         content:content,
         video:video,
-        owner:req.body?._id
+        owner:req.user?._id
     })
     if(!comment){
         throw new Apierror(404,"Couldnt comment")
@@ -33,7 +33,7 @@ const updateComment=asyncHandler(async(req,res)=>{
     if(!verifycomment){
       throw new Apierror(400,"Couldnt find the comment")
     }
-    if(!verifycomment?.owner.toString()!==req.body?._id.toString()){
+    if(!verifycomment?.owner.toString()!==req.user?._id.toString()){
         throw new Apierror(400,"Only valid user can update comment")
     }
     const comment=await Comment.findByIdAndUpdate(
@@ -56,7 +56,7 @@ const deleteComment=asyncHandler(async(req,res)=>{
     if(!comment){
         throw new Apierror(402,"Couldnt find the comment")
     }
-    if(comment.owner?.toString()!==req.body?._id.toString()){ 
+    if(comment.owner?.toString()!==req.user?._id.toString()){ 
         throw new Apierror(400,"Only the owner can delete comment")
     }
     const newcomment=await Comment.findByIdAndDelete(commentId)

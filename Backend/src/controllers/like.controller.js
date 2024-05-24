@@ -1,7 +1,7 @@
-import { asyncHandler } from "../utils/asyncHandler";
-import { Apierror } from "../utils/ApiError";
-import { Apisuccess } from "../utils/Apisuccess";
-import { Like } from "../models/like.model";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { Apierror } from "../utils/ApiError.js";
+import { Apisuccess } from "../utils/Apisuccess.js";
+import { Like } from "../models/like.model.js";
 import { isValidObjectId } from "mongoose";
 
 const togglevideoliked=asyncHandler(async(req,res)=>{
@@ -11,7 +11,7 @@ const togglevideoliked=asyncHandler(async(req,res)=>{
         throw new Apierror(400,"Invalid Videoid")
     }
     const videolikealready=await Like.findOne({
-        $and:[{video:videoId},{likedby:req.body?._id}]
+        $and:[{video:videoId},{likedby:req.user?._id}]
     })
     if(videolikealready){
         await Like.findByIdAndDelete(
@@ -21,7 +21,7 @@ const togglevideoliked=asyncHandler(async(req,res)=>{
     else{
         await Like.create({
             video:videoId,
-            likedby:req.body?._id
+            likedby:req.user?._id
         })
     }
     return res.status(200)
@@ -34,7 +34,7 @@ const togglecomment=asyncHandler(async(req,res)=>{
         throw new Apierror(404,"Comment id is invalid")
     }
     const comment=await Like.findOne({
-        $and:[{comment:commentId},{likedby:req.body?._id}]
+        $and:[{comment:commentId},{likedby:req.user?._id}]
     })
     if(comment){
         await Like.findByIdAndDelete(comment?._id)
@@ -42,7 +42,7 @@ const togglecomment=asyncHandler(async(req,res)=>{
     else{
         await Like.create({
             comment:commentId,
-            likedby:req.body?._id
+            likedby:req.user?._id
         })
     }
     return res.status(200)
@@ -54,7 +54,7 @@ const toggletweet=asyncHandler(async(req,res)=>{
         throw new Apierror(400,"Invalid tweet id")
     }
     const tweet=await Like.findOne({
-        $and:[{tweet:tweetId},{likedby:req.body?._id}]
+        $and:[{tweet:tweetId},{likedby:req.user?._id}]
     })
     if(tweet){
         await Like.findByIdAndDelete(tweetId)
@@ -62,24 +62,46 @@ const toggletweet=asyncHandler(async(req,res)=>{
     else{
         await Like.create({
             tweet:tweetId,
-            likedby:req.body?._id
+            likedby:req.user?._id
         })
     }
     return res.status(200)
     .json(new Apisuccess(200,"Tweet liked successfully",{}))
 })
 const getlikedvideos=asyncHandler(async(req,res)=>{
-    await Like.aggregate([{
+    const likedVideos=await Like.aggregate([{
         $match:{
-            likedby:req.body?._id
+            likedby:req.user?._id
         },
     },
     {
         $lookup:{
-            
+            from:"videos",
+            localField:"video",
+            foreignField:"_id",
+            as:"like"
+        }
+    },
+    {
+        $addFields:{
+            totallikedbyuser:{
+                $size:"$like"
+            }
+        }
+    },
+    {
+        $project:{
+            likedby:1,
+            totallikedbyuser:1,
+            like:1
         }
     }
     
     ])
+    if (!likedVideos || likedVideos.length === 0) {
+        throw new Apierror(404, "Couldn't find liked videos");
+    }
+    return res.status(200)
+    .json(new Apisuccess(200,"Fetched all the liked video successfully",{}))
 })
-export {togglevideoliked,togglecomment,toggletweet}
+export {togglevideoliked,togglecomment,toggletweet,getlikedvideos}
