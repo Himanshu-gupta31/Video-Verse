@@ -1,7 +1,7 @@
 import { Apierror } from "../utils/ApiError.js";
 import { Apisuccess } from "../utils/Apisuccess.js";
 import { Comment } from "../models/comment.model.js";
-import mongoose from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import {Video} from "../models/video.model.js"
 
@@ -14,7 +14,7 @@ const addComment=asyncHandler(async(req,res)=>{
     }
     const comment=await Comment.create({
         content:content,
-        video:video,
+        video:videoId,
         owner:req.user?._id
     })
     if(!comment){
@@ -65,5 +65,24 @@ const deleteComment=asyncHandler(async(req,res)=>{
     }
     return res.status(200)
     .json(new Apisuccess(200,"Comment deleted successfully",newcomment))
+})
+const getallvideocomments=asyncHandler(async(req,res)=>{
+    const {videoId}=req.params
+    const {page=1,limit=10}=req.query
+    if(!isValidObjectId(videoId)){
+        throw new Apierror(400,"Invalid video id")
+    }
+    const allcommentsinvideo=await Comment.aggregate([
+        {
+          $match:{
+            video:new mongoose.Types.ObjectId(videoId)
+          }
+        },
+        {
+            $lookup:{
+                from:""
+            }
+        }
+])
 })
 export {addComment,updateComment,deleteComment}
