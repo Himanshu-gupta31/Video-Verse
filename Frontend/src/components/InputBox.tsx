@@ -13,6 +13,7 @@ export const InputBox:React.FC<InputBoxProps>=({
     type,
     inputOnChange,
     className,
+    
 
     
 }) => {
