@@ -41,13 +41,16 @@ const registerUser=asyncHandler(async(req,res)=>{
    }
     // const avatarlocalpath= req.files?.avatar[0]?.path;
     let avatarlocalpath;
+    
     if(req.files && Array.isArray(req.files.avatar) && req.files.avatar.length>0  ){
         avatarlocalpath=req.files.avatar[0].path
     }
+    
     let coverimagelocalpath;
     if(req.files && Array.isArray(req.files.coverimage) && req.files.coverimage.length>0  ){
         coverimagelocalpath=req.files.coverimage[0].path
     }
+    
     if(!avatarlocalpath){
         throw new Apierror(400,"Avatar file is compulsory ")
     }
