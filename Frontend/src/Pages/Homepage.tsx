@@ -6,7 +6,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="bg-black w-screen h-screen overflow-y-hidden flex">
       {/* Sidebar */}
-      <hr className="w-screen absolute top-20" />
+      <hr className="absolute w-screen top-20 border border-t border-white"></hr>
       <div>
         <Link to="/signin">
           <button className="border border-white text-white h-8 rounded-lg w-20 text-center absolute right-0 mt-6 mr-4 z-10 ">
@@ -176,6 +176,7 @@ const HomePage: React.FC = () => {
           />
         </div>
         <div className=" border-t w-[17rem] bg-slate-500"></div>
+        <button className="w-[4rem] h-[2rem] rounded-md mt-4 ml-2 font-serif text-white border border-white">Logout</button>
       </div>
 
       <div className="flex-1 relative">
