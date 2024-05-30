@@ -7,3 +7,4 @@ router.route("/toggle/v/:videoId").post(togglevideoliked)
 router.route("/toggle/c/:commentId").post(togglecomment)
 router.route("/toggle/t/:tweetId").post(toggletweet)
 router.route("/videos").get(getlikedvideos)
+export default router

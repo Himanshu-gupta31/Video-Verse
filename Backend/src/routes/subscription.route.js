@@ -6,3 +6,4 @@ const router=Router()
 router.route("/toggle/sub/:channelId").post(togglesSubscription)
 router.route("getchannel/sub/:channelId").get(getChannelSubscriber)
 router.route("getsubscribedchannel/sub/:subscriberId").get(getSubscribedChannel)
+export default router
