@@ -6,6 +6,7 @@ import { uploadOncloudinary } from "../utils/Cloudinary.js";
 import { isValidObjectId } from "mongoose";
 const getAllVideos=asyncHandler(async(req,res)=>{
     const {page = 1, limit = 10, query, sortBy, sortType, userId}=req.query
+    
 })
 const publishVideo=asyncHandler(async(req,res)=>{
     const {title,description}=req.body
@@ -156,4 +157,4 @@ const togglePublishedStatus=asyncHandler(async(req,res)=>{
     return res.status(200)
     .json(new Apisuccess(200,"Video published toggle successfully",{toggle}))
 })
-export {getAllVideos,publishVideo,getVideoById,updateVideothumbnail,updateTitleAndDescription,deleteVideo}
+export {getAllVideos,publishVideo,getVideoById,updateVideothumbnail,updateTitleAndDescription,deleteVideo,togglePublishedStatus}
