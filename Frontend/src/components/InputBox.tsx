@@ -13,6 +13,7 @@ export const InputBox:React.FC<InputBoxProps>=({
     type,
     inputOnChange,
     className,
+    inputTitle
     
 
     
@@ -26,6 +27,7 @@ export const InputBox:React.FC<InputBoxProps>=({
             className={className}
             onChange={inputOnChange}
             required
+            title={inputTitle}
             ></input>
             
         </div>

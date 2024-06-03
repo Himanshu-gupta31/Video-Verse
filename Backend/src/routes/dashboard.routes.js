@@ -1,6 +1,6 @@
 import { Router } from "express";
-import {getChannelStatstotallikes,getChannelStatusTotalVideos,getChannelStatusTotalSubscriber,getChannelVideos} from "../controllers/dashboard.controller"
-import { verifyJWT } from "../middlewares/Auth.middleware";
+import {getChannelStatstotallikes,getChannelStatusTotalVideos,getChannelStatusTotalSubscriber,getChannelVideos} from "../controllers/dashboard.controller.js"
+import { verifyJWT } from "../middlewares/Auth.middleware.js";
 const router=Router()
 router.use(verifyJWT)
 router.route("/dashboard/totallikes").get(getChannelStatstotallikes)

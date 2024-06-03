@@ -6,7 +6,8 @@ import {
     getVideoById,
     togglePublishedStatus,
     publishVideo,
-    deleteVideo
+    deleteVideo,
+    getAllVideos
     
 } from "../controllers/video.controller.js"
 import { verifyJWT } from '../middlewares/Auth.middleware.js';
@@ -30,9 +31,22 @@ router
             },
             
         ]),
-        publishAVideo
+        publishVideo
     );
-
+    router.route("/publishvideo").post(
+        upload.fields([
+            {
+                name: "videoFile",
+                maxCount: 1,
+            },
+            {
+                name: "thumbnail",
+                maxCount: 1,
+            },
+            
+        ]),
+        publishVideo
+    );
 router
     .route("/:videoId")
     .get(getVideoById)
@@ -41,6 +55,7 @@ router
     .patch(updateTitleAndDescription)
 
 router.route("/toggle/publish/:videoId").patch(togglePublishedStatus);
-router.route("/publishvideo").post(publishVideo)
+// router.route("/publishvideo").post(publishVideo)
+router.route("/video").get(getAllVideos)
 
 export default router

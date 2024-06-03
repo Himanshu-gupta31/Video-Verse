@@ -4,16 +4,56 @@ import { Apisuccess } from "../utils/Apisuccess.js";
 import { Video } from "../models/video.model.js";
 import { uploadOncloudinary } from "../utils/Cloudinary.js";
 import { isValidObjectId } from "mongoose";
-const getAllVideos=asyncHandler(async(req,res)=>{
-    const {page = 1, limit = 10, query, sortBy, sortType, userId}=req.query
-    
-})
+const getAllVideos = asyncHandler(async (req, res) => {
+    const { page = 1, limit = 10, query, sortBy = 'createdAt', sortType = 'asc', userId } = req.query;
+
+    // Ensure the page and limit are integers
+    const pageNumber = parseInt(page, 10);
+    const limitNumber = parseInt(limit, 10);
+    const sortDirection = sortType === 'asc' ? 1 : -1;
+
+    // Build the filter query
+    const filter = {};
+    if (query) {
+        filter.title = { $regex: query, $options: 'i' }; // Assuming you want to search by title, case insensitive
+    }
+    if (userId) {
+        filter.userId = userId;
+    }
+
+    try {
+        // Fetch the videos with pagination, filtering, and sorting
+        const videos = await Video.find(filter)
+            .sort({ [sortBy]: sortDirection })
+            .skip((pageNumber - 1) * limitNumber)
+            .limit(limitNumber);
+
+        // Get the total count of videos that match the filter
+        const totalVideos = await Video.countDocuments(filter);
+
+        // Send the response
+        res.status(200).json({
+            success: true,
+            data: videos,
+            totalVideos,
+            totalPages: Math.ceil(totalVideos / limitNumber),
+            currentPage: pageNumber,
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    }
+});
+
+
 const publishVideo=asyncHandler(async(req,res)=>{
     const {title,description}=req.body
-    if(!title && title.length===0){
+    console.log(title)
+    console.log(description)
+    console.log(req.body)
+    if(!title || title.length===0){
         throw new Apierror(400,"Title field cannot be empty")
     }
-    if(!description && description.length===0){
+    if(!description || description.length===0){
         throw new Apierror(400,"Description cannot be empty")
     }
     let videoFilepath=req.files?.videoFile[0].path;
@@ -26,6 +66,7 @@ const publishVideo=asyncHandler(async(req,res)=>{
     }
     const video=await uploadOncloudinary(videoFilepath)
     const thumbnail=await uploadOncloudinary(thumbnailPath)
+    console.log(thumbnail)
     if(!video){
         throw new Apierror(400,"Video should be added compulsory")
     }
@@ -36,9 +77,9 @@ const publishVideo=asyncHandler(async(req,res)=>{
         title:title,
         owner:req.user?._id,
         description:description,
-        video:video,
-        thumbnail:thumbnail,
-        duration:duration.video,
+        videoFile:video.url,
+        thumbnail:thumbnail.url,
+        duration:video.duration,
         isPublished:true,
         
     })

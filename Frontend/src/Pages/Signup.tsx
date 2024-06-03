@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup: React.FC = () => {
   const [fullname, setFullname] = useState("");
@@ -11,6 +11,7 @@ const Signup: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [avatar, setAvatar] = useState<File | null>(null);
   const [coverImage, setCoverImage] = useState<File | null>(null);
+  const navigate=useNavigate()
 
   const postSignUpData = async () => {
     const formData = new FormData();
@@ -41,6 +42,7 @@ const Signup: React.FC = () => {
         }
       );
       console.log("Sign-up successful:", response.data);
+      navigate("/")
       // Handle successful sign-up (e.g., redirect to login page)
     } catch (error: any) {
       console.error("Error signing up!", error);
