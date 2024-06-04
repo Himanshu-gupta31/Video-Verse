@@ -7,6 +7,7 @@ import HomePage from './Pages/Homepage.tsx'
 import Signin from './Pages/Signin.tsx'
 import Dashboard from './Pages/Dashboard.tsx'
 import Video from './Pages/Video.tsx'
+import Twitter from './Pages/Twitter.tsx'
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -15,6 +16,7 @@ const router=createBrowserRouter(
       <Route path='/signin' element={<Signin/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='/video' element={<Video/>}/>
+      <Route path='/twitter' element={<Twitter/>}/>
     </Route>
   )
 )
