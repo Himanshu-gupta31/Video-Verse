@@ -4,6 +4,8 @@ const Sidebarfull:React.FC=()=>{
     return(
         <>
         <div className="">
+        <div className="">
+            
           <Sidebar
             icon={
               <svg
@@ -162,6 +164,7 @@ const Sidebarfull:React.FC=()=>{
             }
             SidebarTitle="Liked Videos"
           />
+        </div>
         </div>
         </>
     )

@@ -38,6 +38,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
             totalVideos,
             totalPages: Math.ceil(totalVideos / limitNumber),
             currentPage: pageNumber,
+            
         });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server Error', error: error.message });
