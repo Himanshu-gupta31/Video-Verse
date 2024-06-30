@@ -34,12 +34,15 @@ const Signup: React.FC = () => {
     try {
       const response = await axios.post(
         "http://localhost:8000/api/v1/users/register",
+        
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+         
+        },
+       
       );
       console.log("Sign-up successful:", response.data);
       navigate("/")

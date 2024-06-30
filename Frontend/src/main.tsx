@@ -9,6 +9,7 @@ import Dashboard from './Pages/Dashboard.tsx'
 import Video from './Pages/Video.tsx'
 import Twitter from './Pages/Twitter.tsx'
 import Sidebarfull from './components/Sidebarfull.tsx'
+import VideoDetail from './components/VideoDetails.tsx'
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -19,6 +20,7 @@ const router=createBrowserRouter(
       <Route path='/video' element={<Video/>}/>
       <Route path='/twitter' element={<Twitter/>}/>
       <Route path='/sidebar' element={<Sidebarfull/>}/>
+      <Route path="/video/:videoId" element={<VideoDetail />} />
     </Route>
   )
 )

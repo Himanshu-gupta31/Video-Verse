@@ -32,14 +32,14 @@ const getAllVideos = asyncHandler(async (req, res) => {
         const totalVideos = await Video.countDocuments(filter);
 
         // Send the response
-        res.status(200).json({
-            success: true,
+        res.status(200).json(new Apisuccess(200,"Data send successfully",
+            {success: true,
             data: videos,
             totalVideos,
             totalPages: Math.ceil(totalVideos / limitNumber),
-            currentPage: pageNumber,
+            currentPage: pageNumber}
             
-        });
+        ));
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server Error', error: error.message });
     }
