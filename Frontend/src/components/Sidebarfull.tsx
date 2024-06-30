@@ -1,12 +1,14 @@
 import React from "react";
 import { Sidebar } from "./Sidebar";
+import { Link } from "react-router-dom";
 const Sidebarfull:React.FC=()=>{
     return(
         <>
         <div className="">
         <div className="">
-            
+          <Link to="/" >
           <Sidebar
+
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -14,7 +16,7 @@ const Sidebarfull:React.FC=()=>{
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="white"
-                className="size-6"
+                className="size-6 cursor-pointer"
               >
                 <path
                   strokeLinecap="round"
@@ -25,6 +27,7 @@ const Sidebarfull:React.FC=()=>{
             }
             SidebarTitle="Home"
           />
+          </Link>
           <Sidebar
             icon={
               <svg
@@ -64,6 +67,7 @@ const Sidebarfull:React.FC=()=>{
             SidebarTitle="Subscription"
           />
           <div className=" border-t w-[17rem] bg-slate-500"></div>
+          <Link to="/dashboard">
           <Sidebar
             icon={
               <svg
@@ -82,7 +86,8 @@ const Sidebarfull:React.FC=()=>{
               </svg>
             }
             SidebarTitle="Your channel"
-          />
+            />
+            </Link>
           <Sidebar
             icon={
               <svg

@@ -37,9 +37,9 @@ const VideoDetail: React.FC = () => {
     return (
         <div className="bg-black text-white flex justify-center items-center h-screen">
             {video && (
-                <div className="p-8 bg-gray-800 border border-gray-700 rounded-lg w-1/2">
+                <div className="p-8 border border-white rounded-lg w-3/4 h-3/4">
                     <h1 className="text-2xl mb-4">{video.title}</h1>
-                    <video controls className="w-[30rem] h-[30rem] mb-4">
+                    <video controls className="w-3/4 h-3/4 mb-4">
                         <source src={video.videoFile} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
