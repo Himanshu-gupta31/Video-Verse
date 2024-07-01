@@ -42,7 +42,7 @@ const getChannelStatstotallikes = asyncHandler(async (req, res) => {
         throw new Apierror('No videos found for the given user', 404);
       }
     return res.status(200)
-    .json(new Apisuccess(200,"Videos liked",{}))
+    .json(new Apisuccess(200,"Videos liked",{videoLiked}))
 })
 const getChannelStatusTotalVideos = asyncHandler(async (req, res) => {
   const userId = req.user?._id;
