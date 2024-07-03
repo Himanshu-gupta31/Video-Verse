@@ -68,6 +68,20 @@ const VideoDetail: React.FC = () => {
     }
   };
 
+    const updateWatchHistory = async () => {
+        try {
+            await axios.put(`http://localhost:8000/api/v1/users/addToWatchHistory/${videoId}`,{},
+                {
+                    withCredentials: true,
+                    //@ts-ignore
+                    credentials : 'include'
+                }
+            )
+        } catch (error) {
+            console.error("Error updating watch history",error)
+        }
+    }
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
@@ -76,7 +90,7 @@ const VideoDetail: React.FC = () => {
       {video && (
         <div className="p-8 border border-white rounded-lg w-3/4 h-fit">
           <h1 className="text-2xl mb-4">{video.title}</h1>
-          <video controls className="w-3/4 h-3/4 mb-4">
+          <video controls className="w-3/4 h-3/4 mb-4" onPlay={updateWatchHistory}>
             <source src={video.videoFile} type="video/mp4" />
             Your browser does not support the video tag.
           </video>

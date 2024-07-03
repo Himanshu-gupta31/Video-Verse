@@ -8,6 +8,7 @@ const Twitter: React.FC = () => {
   const [alltweets, setAllTweets] = useState<any[]>([]);
   const [userdetails, setUserDetails] = useState<any>(null);
   const [dropdownIndex, setDropdownIndex] = useState<number | null>(null); // State to handle dropdown visibility
+
   const navigate = useNavigate();
   
   
@@ -20,7 +21,7 @@ const Twitter: React.FC = () => {
           credentials: "include",
         });
         console.log("Current User Details", response.data);
-        setUserDetails(response.data.message); // Adjusted to set user details properly
+        setUserDetails(response.data.message);
       } catch (error) {
         console.error("Error Getting User Details", error);
         navigate("/signin");
@@ -107,6 +108,13 @@ const Twitter: React.FC = () => {
         <div className="mt-8 flex">
           <Sidebarfull />
           <div className="ml-8 flex-grow">
+            <Link to='/createTweet'>
+          <div className="mb-4 flex justify-center">
+            <button className="border-2 p-4 rounded-xl border-white bg-indigo-500 my-2">
+              <span className="font-semibold"> What are you thinking today?! </span>  <span className="font-bold">Tweet Now!</span>
+            </button>
+          </div>
+            </Link>
             {alltweets.length > 0 ? (
               alltweets.map((tweet: any, index: number) => (
                 <div key={tweet._id} className="bg-black rounded-2xl border border-white mb-4 p-4 flex flex-row relative">

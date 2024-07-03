@@ -11,6 +11,7 @@ import Twitter from './Pages/Twitter.tsx'
 import Sidebarfull from './components/Sidebarfull.tsx'
 import VideoDetail from './components/VideoDetails.tsx'
 import CreateTweet from './Pages/CreateTweet.tsx'
+import WatchHistoryPage from './Pages/WatchHistory.tsx'
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -23,6 +24,7 @@ const router=createBrowserRouter(
       <Route path='/sidebar' element={<Sidebarfull/>}/>
       <Route path="/video/:videoId" element={<VideoDetail />} />
       <Route path="/createtweet" element={<CreateTweet/>}/>
+      <Route path="/watchHistory" element={<WatchHistoryPage/>}/>
       
     </Route>
   )
