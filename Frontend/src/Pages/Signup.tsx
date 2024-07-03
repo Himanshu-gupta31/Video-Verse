@@ -59,7 +59,7 @@ const Signup: React.FC = () => {
 
   return (
     <div className="bg-black text-white flex justify-center items-center h-screen">
-      <div className="p-8 bg-black border border-white h-3/4 shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105">
+      <div className="p-8 bg-black border border-white h-fit shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105">
         <h1 className="text-white text-2xl text-center mb-4">Sign Up</h1>
         <form
           onSubmit={(e) => {
@@ -67,15 +67,6 @@ const Signup: React.FC = () => {
             postSignUpData();
           }}
         >
-          <div className="mb-4">
-            <InputBox
-              inputTitle="Email"
-              inputPlaceholder="Enter your Email"
-              type="email"
-              className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500"
-              inputOnChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
           <div className="mb-4">
             <InputBox
               inputTitle="Fullname"
@@ -92,6 +83,15 @@ const Signup: React.FC = () => {
               type="text"
               className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500"
               inputOnChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <InputBox
+              inputTitle="Email"
+              inputPlaceholder="Enter your Email"
+              type="email"
+              className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500"
+              inputOnChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="mb-4">
