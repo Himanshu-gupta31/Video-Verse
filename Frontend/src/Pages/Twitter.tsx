@@ -1,72 +1,75 @@
-import React, { useState } from 'react';
- 
-import axios from 'axios';
-import Sidebarfull from '../components/Sidebarfull';
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import Sidebarfull from "../components/Sidebarfull";
+import Navbar from "../components/Navbar";
+import axios from "axios";
 
 const Twitter: React.FC = () => {
-  const [content, setContent] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  
-   
-  const postTweetData = async () => {
-    try {
-      const response = await axios.post(
-        'http://localhost:8000/api/v1/tweets/tweet',
-        {
-          content: content,
-        },
-        {
+  const [alltweets, setAllTweets] = useState<any[]>([]);
+  const [userdetails, setUserDetails] = useState<any>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/v1/users/getcurrentuser", {
           withCredentials: true,
           //@ts-ignore
-          credentials: 'include',
-        }
-      );
-      console.log('Twitted Successfully', response.data);
-    } catch (error) {
-      console.log('Something went wrong while publishing tweet', error);
-      setError('Cannot Tweet');
-    }
-  };
+          credentials: "include",
+        });
+        console.log("Current User Details", response.data);
+        setUserDetails(response.data.message);
+      } catch (error) {
+        console.error("Error Getting User Details", error);
+        navigate("/signin");
+      }
+    };
+    getUser();
+  }, [navigate]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    postTweetData();
-  };
+  useEffect(() => {
+    const getTweets = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/v1/tweets/alltweets", {
+          withCredentials: true,
+          //@ts-ignore
+          credentials: "include",
+        });
+        console.log("All Tweets", response.data);
+        setAllTweets(response.data.data.alltweet);
+      } catch (error) {
+        console.error("Error getting all tweets", error);
+      }
+    };
+    getTweets();
+  }, []);
 
   return (
     <>
-      <div className="w-screen h-screen bg-black flex justify-center items-center text-white">
-        <hr className="absolute w-screen top-20 border border-t border-white"></hr>
-        <hr className="absolute h-screen left-[17rem] top-20 border border-l border-white"></hr>
-        <div className="absolute left-0 top-20">
-          <Sidebarfull />
-        </div>
-        <div className="p-8 bg-black border border-white h-3/4 shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105 mt-4">
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col justify-center items-start w-full mb-4">
-              <label className="mb-2 text-sm font-medium text-gray-300">Content</label>
-              <textarea
-                placeholder="Content"
-                className="w-full rounded-md bg-black border border-white px-2 outline-gray-500 "
-                onChange={(e) => setContent(e.target.value)}
-                title="Content"
-                rows={10}
-              />
+      <div className="text-white">
+        <Navbar />
+        <div className="absolute right-0 top-0 mt-4 mr-4 z-10">
+          {userdetails ? (
+            <img src={userdetails.avatar} className="rounded-full border border-white w-[3rem] h-[3rem]" alt="User Avatar" />
+          ) : (
+            <div>
+              <Link to="/signin">
+                <button className="border border-white text-white h-8 rounded-lg w-20 text-center">
+                  Sign in
+                </button>
+              </Link>
             </div>
-            <button
-              className="h-11 bg-gray-700 hover:bg-slate-600 w-[6rem] text-center rounded-md mt-8"
-              type="submit"
-            >
-              Submit
-            </button>
-            <button
-              className="ml-4 h-11 bg-gray-700 hover:bg-slate-600 w-[8rem] text-center rounded-md mt-8"
-              type="submit"
-            >
-              Edit Comment
-            </button>
-          </form>
-          <div>{error && <p>{error}</p>}</div>
+          )}
+        </div>
+        <div className="mt-8 flex">
+          <Sidebarfull />
+          <div className="ml-8 flex-grow">
+            {alltweets.map((tweet: any) => (
+              <div key={tweet._id} className="bg-black rounded-2xl border border-white mb-4 p-4">
+                <p className="text-white">{tweet.content}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>

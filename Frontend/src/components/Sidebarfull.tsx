@@ -47,6 +47,7 @@ const Sidebarfull:React.FC=()=>{
             }
             SidebarTitle="Shorts"
           />
+          <Link to="/twitter">
           <Sidebar
             icon={
               <svg
@@ -64,8 +65,9 @@ const Sidebarfull:React.FC=()=>{
                 />
               </svg>
             }
-            SidebarTitle="Subscription"
+            SidebarTitle="Twitter"
           />
+          </Link>
           <div className=" border-t w-[17rem] bg-slate-500"></div>
           <Link to="/dashboard">
           <Sidebar

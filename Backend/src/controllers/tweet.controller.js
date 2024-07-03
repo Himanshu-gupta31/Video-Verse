@@ -99,4 +99,9 @@ const getusertweets=asyncHandler(async(req,res)=>{
      return res.status(200)
      .json(new Apisuccess(200,"All tweets fetched successfully",{alltweets}))
 })
-export {createtweet,updatetweet,deletetweet,getusertweets}
+const getAllTweets=asyncHandler(async(req,res)=>{
+      const alltweet=await Tweet.find()
+      return res.status(200)
+      .json(new Apisuccess(200,"All Tweets fetched",{alltweet}))
+})
+export {createtweet,updatetweet,deletetweet,getusertweets,getAllTweets}
