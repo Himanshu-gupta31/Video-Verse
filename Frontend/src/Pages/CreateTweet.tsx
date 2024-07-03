@@ -2,11 +2,12 @@ import React, { useState } from 'react';
  
 import axios from 'axios';
 import Sidebarfull from '../components/Sidebarfull';
+import { useNavigate } from 'react-router-dom';
 
 const CreateTweet: React.FC = () => {
   const [content, setContent] = useState('');
   const [error, setError] = useState<string | null>(null);
-  
+  const navigate=useNavigate()
    
   const postTweetData = async () => {
     try {
@@ -22,6 +23,7 @@ const CreateTweet: React.FC = () => {
         }
       );
       console.log('Twitted Successfully', response.data);
+      navigate("/twitter")
     } catch (error) {
       console.log('Something went wrong while publishing tweet', error);
       setError('Cannot Tweet');

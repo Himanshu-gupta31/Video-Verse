@@ -23,6 +23,7 @@ const router=createBrowserRouter(
       <Route path='/sidebar' element={<Sidebarfull/>}/>
       <Route path="/video/:videoId" element={<VideoDetail />} />
       <Route path="/createtweet" element={<CreateTweet/>}/>
+      
     </Route>
   )
 )

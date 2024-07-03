@@ -99,9 +99,30 @@ const getusertweets=asyncHandler(async(req,res)=>{
      return res.status(200)
      .json(new Apisuccess(200,"All tweets fetched successfully",{alltweets}))
 })
-const getAllTweets=asyncHandler(async(req,res)=>{
-      const alltweet=await Tweet.find()
-      return res.status(200)
-      .json(new Apisuccess(200,"All Tweets fetched",{alltweet}))
-})
+const getAllTweets = asyncHandler(async (req, res) => {
+    const alltweets = await Tweet.aggregate([
+      {
+        $lookup: {
+          from: 'users', // The name of the users collection
+          localField: 'owner', // The field in the tweets collection
+          foreignField: '_id', // The field in the users collection
+          as: 'user', // The name of the field to add the user data
+        },
+      },
+      {
+        $unwind: '$user', // Unwind the user array
+      },
+      {
+        $project: {
+          _id: 1,
+          content: 1,
+          createdAt: 1,
+          'user.username': 1, // Include only the username field from the user data
+        },
+      },
+    ]);
+  
+    return res.status(200).json(new Apisuccess(200, 'All Tweets fetched', { alltweets }));
+  });
+  
 export {createtweet,updatetweet,deletetweet,getusertweets,getAllTweets}
