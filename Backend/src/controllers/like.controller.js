@@ -57,7 +57,7 @@ const toggletweet=asyncHandler(async(req,res)=>{
         $and:[{tweet:tweetId},{likedby:req.user?._id}]
     })
     if(tweet){
-        await Like.findByIdAndDelete(tweetId)
+        await Like.findByIdAndDelete(tweet._id)
     }
     else{
         await Like.create({
