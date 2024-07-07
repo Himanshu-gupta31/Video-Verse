@@ -43,12 +43,12 @@ const CreateTweet: React.FC = () => {
         <div className="absolute left-0 top-20">
           <Sidebarfull />
         </div>
-        <div className="p-8 bg-black border border-white h-3/4 shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105 mt-4">
+        <div className="p-8 bg-black  h-3/4 shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105 mt-4">
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col justify-center items-start w-full mb-4">
-              <label className="mb-2 text-sm font-medium text-gray-300">Content</label>
+              <label className="mb-2 text-sm font-medium text-gray-300"></label>
               <textarea
-                placeholder="Content"
+                placeholder="What is happening..."
                 className="w-full rounded-md bg-black border border-white px-2 outline-gray-500 "
                 onChange={(e) => setContent(e.target.value)}
                 title="Content"
@@ -59,14 +59,9 @@ const CreateTweet: React.FC = () => {
               className="h-11 bg-gray-700 hover:bg-slate-600 w-[6rem] text-center rounded-md mt-8"
               type="submit"
             >
-              Submit
+              Post
             </button>
-            <button
-              className="ml-4 h-11 bg-gray-700 hover:bg-slate-600 w-[8rem] text-center rounded-md mt-8"
-              type="submit"
-            >
-              Edit Comment
-            </button>
+            
           </form>
           <div>{error && <p>{error}</p>}</div>
         </div>

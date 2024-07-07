@@ -51,20 +51,20 @@ const Video: React.FC = () => {
     return (
         <>
             <div className="bg-black text-white flex justify-center items-center h-screen">
-                <div className="p-8 bg-black border border-white h-1/2 shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105">
+                <div className="p-8 bg-black border border-white h-fit shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105">
                     <form onSubmit={handleSubmit}>
                         <InputBox
                             type="text"
                             inputPlaceholder="Title"
                             inputOnChange={(e) => SetTitle(e.target.value)}
-                            className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500"
+                            className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500 mt-4 mb-4"
                             inputTitle="Title"
                         />
                         <InputBox
                             type="text"
                             inputPlaceholder="Description"
                             inputOnChange={(e) => SetDescription(e.target.value)}
-                            className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500"
+                            className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500 mt-4 mb-4"
                             inputTitle="Description"
                         />
                         <InputBox
@@ -72,7 +72,7 @@ const Video: React.FC = () => {
                             inputTitle="Video File"
                             type="file"
                             accept="video/*"
-                            className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500"
+                            className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500 mt-4 mb-4"
                             inputOnChange={(e) => {
                                 if (e.target.files && e.target.files.length > 0) {
                                     SetVideoFile(e.target.files[0]);
@@ -84,20 +84,23 @@ const Video: React.FC = () => {
                             inputTitle="Thumbnail"
                             type="file"
                             accept="image/*"
-                            className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500"
+                            className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500 mt-4 mb-4"
                             inputOnChange={(e) => {
                                 if (e.target.files && e.target.files.length > 0) {
                                     SetThumbnail(e.target.files[0]);
                                 }
                             }}
                         />
+                        <div className="flex flex-row  items-center">
+                        <label>Is Public:</label>
                         <InputBox
                             inputPlaceholder="IsPublished"
                             inputTitle="IsPublished"
                             type="checkbox"
-                            className="w-full rounded-md bg-black border border-white h-11 px-2 outline-gray-500"
+                            className="w-full rounded-md bg-black border border-white h-8 px-2 outline-gray-500 mt-4 mb-4"
                             inputOnChange={(e) => SetIsPublished(e.target.checked)}
                         />
+                        </div>
                         <button type="submit" className="h-11 bg-gray-700 hover:bg-slate-600 w-full text-center rounded-md mt-8">Submit</button>
                     </form>
                     <div>

@@ -18,7 +18,7 @@ const HomePage: React.FC = () => {
           //@ts-ignore
           credentials: 'include',
         });
-        console.log("API response:", response.data);
+        console.log("API response all videos:", response.data);
 
         // Set videos state with the array of videos
         setVideos(response.data.data.data);
@@ -113,8 +113,15 @@ const HomePage: React.FC = () => {
                   alt={video.title}
                   className="w-full h-40  rounded-xl mb-2 border border-gray-700"
                 />
+                <div className="flex flex-row mt-4">
+                {userdetails &&
+                <img className="rounded-full border border-gray-500 w-12 h-12 " src={userdetails.avatar}></img>
+                }
+                <div className="flex flex-col ml-4">
                 <h3 className="text-white text-lg font-bold">{video.title}</h3>
                 <p className="text-gray-400">{video.description}</p>
+                </div>
+                </div>
               </Link>
             ))}
           </div>

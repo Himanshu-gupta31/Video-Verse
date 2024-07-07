@@ -115,7 +115,7 @@ const VideoDetail: React.FC = () => {
           </button>
 
           <p>{video.description}</p>
-          <p >Published On:{formatDate(video.createdAt)}</p>
+          <p className="text-gray-400" >Published On:{formatDate(video.createdAt)}</p>
         </div>
       )}
     </div>
