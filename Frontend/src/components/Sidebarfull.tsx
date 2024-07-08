@@ -50,7 +50,7 @@ const Sidebarfull:React.FC=()=>{
             SidebarTitle="Twitter"
           />
           </Link>
-          <div className=" border-t w-[17rem] bg-slate-500"></div>
+          <div className=" border-t w-[16rem] bg-slate-500"></div>
           <Link to="/dashboard">
           <Sidebar
             icon={

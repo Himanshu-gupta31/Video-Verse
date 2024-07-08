@@ -4,7 +4,7 @@ const Navbar: React.FC = () => {
   return (
     <>
       <div className="relative w-full">
-        <div className="absolute left-[17rem] top-16 bottom-0 bg-white border-l h-screen overflow-y-hidden"></div>
+        <div className="absolute left-[16rem] top-16 bottom-0 bg-white border-l h-screen overflow-y-hidden"></div>
         <div className="flex justify-center mt-4">
           <input
             type="text"
