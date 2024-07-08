@@ -5,9 +5,12 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const HomePage: React.FC = () => {
+  
   const [videos, setVideos] = useState<any[]>([]);
   const [userdetails,SetUserDetails]=useState<any>("")
+  
   const navigate=useNavigate()
+  
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -119,7 +122,10 @@ const HomePage: React.FC = () => {
                 }
                 <div className="flex flex-col ml-4">
                 <h3 className="text-white text-lg font-bold">{video.title}</h3>
+                <div className="">
                 <p className="text-gray-400">{video.description}</p>
+                <p className="text-gray-400">{video.views.length} Views</p>
+                </div>
                 </div>
                 </div>
               </Link>

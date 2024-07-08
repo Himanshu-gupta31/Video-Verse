@@ -4,6 +4,7 @@ import { Apisuccess } from "../utils/Apisuccess.js";
 import { Video } from "../models/video.model.js";
 import { uploadOncloudinary } from "../utils/Cloudinary.js";
 import { isValidObjectId } from "mongoose";
+import e from "express";
 const getAllVideos = asyncHandler(async (req, res) => {
   const {
     page = 1,
@@ -205,31 +206,41 @@ const deleteVideo = asyncHandler(async (req, res) => {
 });
 const viewsinvideo = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
+  const userId = req.user?._id;
 
   // Validate videoId
   if (!isValidObjectId(videoId)) {
-    throw new Apierror(400, "Invalid videoId");
+    return res.status(400).json(new Apierror(400, "Invalid videoId"));
   }
 
-  // Update views for the video
-  const updatedVideo = await Video.findByIdAndUpdate(
-    videoId,
-    { $addToSet: { views: req.body._id } },
-    { new: true }
-  );
+  try {
+    // Find the video by ID
+    const video = await Video.findById(videoId);
 
-  if (!updatedVideo) {
-    throw new Apierror(404, "Video not found or failed to update views");
+    if (!video) {
+      return res.status(404).json(new Apierror(404, "Video not found"));
+    }
+
+    // Initialize views as an empty array if it is not already an array
+    if (!Array.isArray(video.views)) {
+      video.views = [];
+    }
+
+    // Check if the user has already viewed the video
+    if (!video.views.includes(userId)) {
+      video.views.push(userId);
+      await video.save();
+    }
+
+    const totalViews = video.views.length;
+
+    return res.status(200).json(new Apisuccess(200, "Total views fetched successfully", { totalViews }));
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json(new Apierror(500, "Internal Server Error"));
   }
-
-  if (!updatedVideo.views || !Array.isArray(updatedVideo.views)) {
-    throw new Apierror(400, "Failed to fetch total views");
-  }
-
-  const totalViews = updatedVideo.views.length;
-
-  return res.status(200).json(new Apisuccess(200, "Total views fetched successfully", { totalViews }));
 });
+
 // const increaseviews=asyncHandler(async(req,res)=>{
 //   const {videoId}=req.params;
 //   const {userId}=req.body?._id

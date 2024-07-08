@@ -23,7 +23,8 @@ const videoSchema=new Schema({
     },
     views: [{
         type: Schema.Types.ObjectId,
-        ref: 'User' // Assuming there is a User model
+        ref: 'User',
+        default: []
       }],
     isPublished:{
         type:Boolean,

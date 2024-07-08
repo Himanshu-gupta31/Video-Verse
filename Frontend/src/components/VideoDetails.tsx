@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-function formatDate(isoDateString: any) {
+function formatDate(isoDateString: string) {
   const date = new Date(isoDateString);
-  const padZero = (num: any) => (num < 10 ? "0" : "") + num;
+  const padZero = (num: number) => (num < 10 ? "0" : "") + num;
 
   const day = padZero(date.getUTCDate());
   const month = padZero(date.getUTCMonth() + 1); // Months are zero-based
@@ -23,7 +23,7 @@ const VideoDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [liked, setLiked] = useState<boolean>(false);
-  const [totalviews,setTotalViews]=useState(0)
+  const [totalViews, setTotalViews] = useState<number>(0);
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -67,28 +67,31 @@ const VideoDetail: React.FC = () => {
     fetchVideo();
     fetchLikedState();
   }, [videoId]);
-  useEffect(()=>{
-    const totalviews=async()=>{
+
+  useEffect(() => {
+    const fetchTotalViews = async () => {
       try {
-        console.log(`http://localhost:8000/api/v1/video/views/${videoId}`)
-        const response=await axios.get(
+        console.log(`http://localhost:8000/api/v1/video/views/${videoId}`);
+        const response = await axios.get(
           `http://localhost:8000/api/v1/video/views/${videoId}`,
           {
-            withCredentials:true,
+            withCredentials: true,
             //@ts-ignore
-            credentials:'include'
+            credentials: "include",
           }
         );
-        console.log("Total Views",response.data)
-        setTotalViews(response.data)
+        console.log("Total Views", response.data);
+        setTotalViews(response.data.data.totalViews);
       } catch (error) {
-        console.error("Error fetching total views",error)
+        console.error("Error fetching total views", error);
       }
     };
-    if(videoId){
-      totalviews()
+
+    if (videoId) {
+      fetchTotalViews();
     }
-  },[videoId])
+  }, [videoId]);
+
   const toggleLike = async () => {
     try {
       const response = await axios.post(
@@ -169,9 +172,7 @@ const VideoDetail: React.FC = () => {
           <p className="text-gray-400">
             Published On: {formatDate(video.createdAt)}
           </p>
-          {totalviews && 
-          <p>{totalviews}</p>
-          }
+          <p className="text-gray-600">Total Views: {totalViews}</p>
         </div>
       )}
     </div>
