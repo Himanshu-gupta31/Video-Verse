@@ -203,7 +203,41 @@ const deleteVideo = asyncHandler(async (req, res) => {
     .status(200)
     .json(new Apisuccess(200, "Video deleted successfully", { deletevideo }));
 });
+const viewsinvideo = asyncHandler(async (req, res) => {
+  const { videoId } = req.params;
 
+  // Validate videoId
+  if (!isValidObjectId(videoId)) {
+    throw new Apierror(400, "Invalid videoId");
+  }
+
+  // Update views for the video
+  const updatedVideo = await Video.findByIdAndUpdate(
+    videoId,
+    { $addToSet: { views: req.body._id } },
+    { new: true }
+  );
+
+  if (!updatedVideo) {
+    throw new Apierror(404, "Video not found or failed to update views");
+  }
+
+  if (!updatedVideo.views || !Array.isArray(updatedVideo.views)) {
+    throw new Apierror(400, "Failed to fetch total views");
+  }
+
+  const totalViews = updatedVideo.views.length;
+
+  return res.status(200).json(new Apisuccess(200, "Total views fetched successfully", { totalViews }));
+});
+// const increaseviews=asyncHandler(async(req,res)=>{
+//   const {videoId}=req.params;
+//   const {userId}=req.body?._id
+//  if(!(isValidObjectId(userId))){
+//   throw new Apierror(404,"Invalid user Id")
+//  }
+
+// })
 const togglePublishedStatus = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
   if (!isValidObjectId(videoId)) {
@@ -240,4 +274,5 @@ export {
   updateTitleAndDescription,
   deleteVideo,
   togglePublishedStatus,
+  viewsinvideo
 };

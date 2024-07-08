@@ -7,7 +7,8 @@ import {
     togglePublishedStatus,
     publishVideo,
     deleteVideo,
-    getAllVideos
+    getAllVideos,
+    viewsinvideo
     
 } from "../controllers/video.controller.js"
 import { verifyJWT } from '../middlewares/Auth.middleware.js';
@@ -53,9 +54,11 @@ router
     .delete(deleteVideo)
     .patch(upload.single("thumbnail"), updateVideothumbnail)
     .patch(updateTitleAndDescription)
+    
 
 router.route("/toggle/publish/:videoId").patch(togglePublishedStatus);
 // router.route("/publishvideo").post(publishVideo)
 router.route("/video").get(getAllVideos)
+router.route("/views/:videoId").get(viewsinvideo)
 
 export default router

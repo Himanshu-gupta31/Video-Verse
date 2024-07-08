@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-function formatDate(isoDateString:any) {
-    const date = new Date(isoDateString);
 
-    const padZero = (num:any) => (num < 10 ? '0' : '') + num;
+function formatDate(isoDateString: any) {
+  const date = new Date(isoDateString);
+  const padZero = (num: any) => (num < 10 ? "0" : "") + num;
 
-    const day = padZero(date.getUTCDate());
-    const month = padZero(date.getUTCMonth() + 1); // Months are zero-based
-    const year = date.getUTCFullYear().toString().slice(-2); // Get last two digits of the year
+  const day = padZero(date.getUTCDate());
+  const month = padZero(date.getUTCMonth() + 1); // Months are zero-based
+  const year = date.getUTCFullYear().toString().slice(-2); // Get last two digits of the year
 
-    const hours = padZero(date.getUTCHours());
-    const minutes = padZero(date.getUTCMinutes());
-    const seconds = padZero(date.getUTCSeconds());
+  const hours = padZero(date.getUTCHours());
+  const minutes = padZero(date.getUTCMinutes());
+  const seconds = padZero(date.getUTCSeconds());
 
-    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 }
 
 const VideoDetail: React.FC = () => {
@@ -23,15 +23,19 @@ const VideoDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [liked, setLiked] = useState<boolean>(false);
+  const [totalviews,setTotalViews]=useState(0)
 
   useEffect(() => {
     const fetchVideo = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/v1/video/${videoId}`, {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        });
+        const response = await axios.get(
+          `http://localhost:8000/api/v1/video/${videoId}`,
+          {
+            withCredentials: true,
+            //@ts-ignore
+            credentials: "include",
+          }
+        );
 
         console.log(response.data); // Inspect the response data structure
         setVideo(response.data.data.video);
@@ -43,10 +47,49 @@ const VideoDetail: React.FC = () => {
       }
     };
 
-    fetchVideo();
-  }, [videoId]);
+    const fetchLikedState = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/v1/likes/check/v/${videoId}`,
+          {
+            withCredentials: true,
+            //@ts-ignore
+            credentials: "include",
+          }
+        );
 
-  const getvideoliked = async (videoId: string) => {
+        setLiked(response.data.liked);
+      } catch (error) {
+        console.error("Error fetching liked state:", error);
+      }
+    };
+
+    fetchVideo();
+    fetchLikedState();
+  }, [videoId]);
+  useEffect(()=>{
+    const totalviews=async()=>{
+      try {
+        console.log(`http://localhost:8000/api/v1/video/views/${videoId}`)
+        const response=await axios.get(
+          `http://localhost:8000/api/v1/video/views/${videoId}`,
+          {
+            withCredentials:true,
+            //@ts-ignore
+            credentials:'include'
+          }
+        );
+        console.log("Total Views",response.data)
+        setTotalViews(response.data)
+      } catch (error) {
+        console.error("Error fetching total views",error)
+      }
+    };
+    if(videoId){
+      totalviews()
+    }
+  },[videoId])
+  const toggleLike = async () => {
     try {
       const response = await axios.post(
         `http://localhost:8000/api/v1/likes/toggle/v/${videoId}`,
@@ -68,19 +111,21 @@ const VideoDetail: React.FC = () => {
     }
   };
 
-    const updateWatchHistory = async () => {
-        try {
-            await axios.put(`http://localhost:8000/api/v1/users/addToWatchHistory/${videoId}`,{},
-                {
-                    withCredentials: true,
-                    //@ts-ignore
-                    credentials : 'include'
-                }
-            )
-        } catch (error) {
-            console.error("Error updating watch history",error)
+  const updateWatchHistory = async () => {
+    try {
+      await axios.put(
+        `http://localhost:8000/api/v1/users/addToWatchHistory/${videoId}`,
+        {},
+        {
+          withCredentials: true,
+          //@ts-ignore
+          credentials: "include",
         }
+      );
+    } catch (error) {
+      console.error("Error updating watch history", error);
     }
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -90,13 +135,19 @@ const VideoDetail: React.FC = () => {
       {video && (
         <div className="p-8 border border-white rounded-lg w-3/4 h-fit">
           <h1 className="text-2xl mb-4">{video.title}</h1>
-          <video controls className="w-3/4 h-3/4 mb-4" onPlay={updateWatchHistory}>
+          <video
+            controls
+            className="w-3/4 h-3/4 mb-4"
+            onPlay={updateWatchHistory}
+          >
             <source src={video.videoFile} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <button
-            className={`border border-white rounded-2xl w-fit flex justify-center px-4 py-2 mb-4 ${liked ? 'bg-indigo-500' : 'bg-transparent'}`}
-            onClick={() => getvideoliked(videoId!)}
+            className={`border border-white rounded-2xl w-fit flex justify-center px-4 py-2 mb-4 ${
+              liked ? "bg-indigo-500" : "bg-transparent"
+            }`}
+            onClick={toggleLike}
           >
             <svg
               width="24"
@@ -111,11 +162,16 @@ const VideoDetail: React.FC = () => {
                 fill="currentColor"
               />
             </svg>
-            {liked ? 'Liked' : 'Like'}
+            {liked ? "Liked" : "Like"}
           </button>
 
           <p>{video.description}</p>
-          <p className="text-gray-400" >Published On:{formatDate(video.createdAt)}</p>
+          <p className="text-gray-400">
+            Published On: {formatDate(video.createdAt)}
+          </p>
+          {totalviews && 
+          <p>{totalviews}</p>
+          }
         </div>
       )}
     </div>

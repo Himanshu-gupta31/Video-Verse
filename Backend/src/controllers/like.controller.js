@@ -28,6 +28,20 @@ const togglevideoliked=asyncHandler(async(req,res)=>{
     .json(new Apisuccess(200,"Liked already",{}))
 
 }) 
+const checkVideoLiked = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+  
+    if (!isValidObjectId(videoId)) {
+      throw new Apierror(400, "Invalid Video ID");
+    }
+  
+    const liked = await Like.findOne({
+      video: videoId,
+      likedby: req.user?._id,
+    });
+  
+    return res.status(200).json({ liked: !!liked });
+  });
 const togglecomment=asyncHandler(async(req,res)=>{
     const {commentId}=req.params
     if(!isValidObjectId(commentId)){
@@ -104,4 +118,4 @@ const getlikedvideos=asyncHandler(async(req,res)=>{
     return res.status(200)
     .json(new Apisuccess(200,"Fetched all the liked video successfully",{}))
 })
-export {togglevideoliked,togglecomment,toggletweet,getlikedvideos}
+export {togglevideoliked,togglecomment,toggletweet,getlikedvideos,checkVideoLiked}

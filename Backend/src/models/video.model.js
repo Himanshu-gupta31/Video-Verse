@@ -21,10 +21,10 @@ const videoSchema=new Schema({
         type:Number,
         required:true
     },
-    views:{
-        type:Number,
-        default:0
-    },
+    views: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User' // Assuming there is a User model
+      }],
     isPublished:{
         type:Boolean,
         default:false
