@@ -1,94 +1,119 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Menu } from "@headlessui/react";
 import Sidebarfull from "../components/Sidebarfull";
 import axios from "axios";
 import Cookies from "js-cookie";
 
 const HomePage: React.FC = () => {
-  
   const [videos, setVideos] = useState<any[]>([]);
-  const [userdetails,SetUserDetails]=useState<any>("")
-  
-  const navigate=useNavigate()
-  
+  const [userdetails, SetUserDetails] = useState<any>("");
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/video",
-          
-          {
+        const response = await axios.get("http://localhost:8000/api/v1/video", {
           withCredentials: true,
           //@ts-ignore
-          credentials: 'include',
+          credentials: "include",
         });
         console.log("API response all videos:", response.data);
-
-        // Set videos state with the array of videos
         setVideos(response.data.data.data);
       } catch (error) {
         console.error("Error fetching videos:", error);
-        
       }
     };
 
     fetchVideos();
   }, []);
-   useEffect(()=>{
-      const getUser=async ()=>{
-        try {
-          const response=await axios.get("http://localhost:8000/api/v1/users/getcurrentuser",
-            {
-              withCredentials:true,
-              //@ts-ignore
-              credentials: 'include'
-            }
-          );
-          console.log("Current User Details",response.data)
-          SetUserDetails(response.data.message)
-        } catch (error) {
-          console.error("Error Getting User Detailed",error)
-          navigate("/signin")
-        }
-      };
-      getUser()
-      
-   },[])
-   
-    const logoutUser=async()=>{
+
+  useEffect(() => {
+    const getUser = async () => {
       try {
-        const response=await axios.post("http://localhost:8000/api/v1/users/logout",
-          {},
-          {
-            withCredentials: true,
-            //@ts-ignore
-            credentials: 'include',
-          }
-        )
-        Cookies.remove("accesstoken")
-        Cookies.remove("refreshtoken")
-        console.log("Logout Succesfully",response.data)
-        navigate("/signin")
+        const response = await axios.get("http://localhost:8000/api/v1/users/getcurrentuser", {
+          withCredentials: true,
+          //@ts-ignore
+          credentials: "include",
+        });
+        console.log("Current User Details", response.data);
+        SetUserDetails(response.data.message);
       } catch (error) {
-         console.error("Error logging out",error)
+        console.error("Error Getting User Detailed", error);
+        navigate("/signin");
       }
+    };
+    getUser();
+  }, []);
+
+  const logoutUser = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/users/logout",
+        {},
+        {
+          withCredentials: true,
+          //@ts-ignore
+          credentials: "include",
+        }
+      );
+      Cookies.remove("accesstoken");
+      Cookies.remove("refreshtoken");
+      console.log("Logout Successfully", response.data);
+      navigate("/signin");
+    } catch (error) {
+      console.error("Error logging out", error);
     }
-    
-   
+  };
+
   return (
     <div className="bg-black w-screen h-screen overflow-y-hidden flex">
       {/* Sidebar */}
       <hr className="absolute w-screen top-20 border border-t border-white"></hr>
       <div className="absolute right-0 mt-4 mr-4 z-10">
-      {userdetails ? <img src={userdetails.avatar} className="rounded-full border border-white w-[3rem] h-[3rem]"/> :<div>
-        <Link to="/signin">
-          <button className="border border-white text-white h-8 rounded-lg w-20 text-center ">
-            Sign in
-          </button>
-        </Link>
-        
-      </div>}
+        {userdetails ? (
+          <Menu as="div" className="relative inline-block text-left">
+            <Menu.Button>
+              <img src={userdetails.avatar} className="rounded-full border border-white w-[3rem] h-[3rem]" />
+            </Menu.Button>
+            <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right bg-white border border-gray-300 divide-y divide-gray-100 rounded-md shadow-lg outline-none ">
+              <div className="px-1 py-1 ">
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      className={`${
+                        active ? "bg-gray-100" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm hover:bg-indigo-500`}
+                      onClick={() => navigate("/video")}
+                    >
+                      Create Video
+                    </button>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      className={`${
+                        active ? "bg-gray-100" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm hover:bg-indigo-500`}
+                      onClick={() => navigate("/createtweet")}
+                    >
+                      Create Tweet
+                    </button>
+                  )}
+                </Menu.Item>
+              </div>
+            </Menu.Items>
+          </Menu>
+        ) : (
+          <div>
+            <Link to="/signin">
+              <button className="border border-white text-white h-8 rounded-lg w-20 text-center ">Sign in</button>
+            </Link>
+          </div>
+        )}
       </div>
-      
+
       <div className="flex-shrink-0 w-36 mt-2">
         <div className="mt-20">
           <Sidebarfull />
@@ -114,19 +139,17 @@ const HomePage: React.FC = () => {
                 <img
                   src={video.thumbnail}
                   alt={video.title}
-                  className="w-full h-40  rounded-xl mb-2 border border-gray-700"
+                  className="w-full h-40 rounded-xl mb-2 border border-gray-700"
                 />
                 <div className="flex flex-row mt-4">
-                {userdetails &&
-                <img className="rounded-full border border-gray-500 w-12 h-12 " src={userdetails.avatar}></img>
-                }
-                <div className="flex flex-col ml-4">
-                <h3 className="text-white text-lg font-bold">{video.title}</h3>
-                <div className="">
-                <p className="text-gray-400">{video.description}</p>
-                <p className="text-gray-400">{video.views.length} Views</p>
-                </div>
-                </div>
+                  {userdetails && <img className="rounded-full border border-gray-500 w-12 h-12" src={userdetails.avatar} />}
+                  <div className="flex flex-col ml-4">
+                    <h3 className="text-white text-lg font-bold">{video.title}</h3>
+                    <div className="">
+                      <p className="text-gray-400">{video.description}</p>
+                      <p className="text-gray-400">{video.views.length} Views</p>
+                    </div>
+                  </div>
                 </div>
               </Link>
             ))}

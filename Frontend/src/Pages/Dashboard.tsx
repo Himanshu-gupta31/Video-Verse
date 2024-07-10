@@ -9,25 +9,25 @@ const Dashboard: React.FC = () => {
   const [userdetails, SetUserDetails] = useState<any>("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const getChannelTotalVideos = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/v1/dashboard/dashboard/videos",
-          {
-            withCredentials: true,
-            //@ts-ignore
-            Credential: "include",
-          }
-        );
-        console.log("Total Videos", response.data);
-        setTotalVideos(response.data.data.channelVideo);
-      } catch (error) {
-        console.error("Error Fetching Total Videos", error);
-      }
-    };
-    getChannelTotalVideos();
-  }, []);
+  // useEffect(() => {
+  //   const getChannelTotalVideos = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "http://localhost:8000/api/v1/dashboard/dashboard/videos",
+  //         {
+  //           withCredentials: true,
+  //           //@ts-ignore
+  //           Credential: "include",
+  //         }
+  //       );
+  //       console.log("Total Videos", response.data);
+  //       setTotalVideos(response.data.data.channelVideo);
+  //     } catch (error) {
+  //       console.error("Error Fetching Total Videos", error);
+  //     }
+  //   };
+  //   getChannelTotalVideos();
+  // }, []);
 
   useEffect(() => {
     const getUser = async () => {
@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
       <div className="flex flex-col mt-2 ml-0">
       {userdetails &&
         <div className="mt-4 relative ">
-          <img className="w-screen h-[15rem]" src={userdetails.coverimage} alt="Cover" />
+          <img className="w-screen h-[15rem] object-cover" src={userdetails.coverimage} alt="Cover" />
           <img className="rounded-full border border-gray-400 w-[6rem] h-[6rem] absolute bottom-[-3rem] left-16" src={userdetails.avatar} alt="Avatar" />
         </div>
       }
@@ -82,7 +82,7 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="w-[16rem] h-[6rem] border border-white text-center mt-8 text-white flex-col">
           <DashboardComponent heading="Total Videos" />
-          <p>{totalVideo.length}</p>
+          {/* <p>{totalVideo.length}</p> */}
         </div>
         <div className="w-[16rem] h-[6rem] border border-white text-center mt-8 text-white">
           <DashboardComponent heading="Total Likes" />
