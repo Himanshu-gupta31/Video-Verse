@@ -38,7 +38,7 @@ const Sidebarfull:React.FC=()=>{
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="white"
-                className="size-6"
+                className="size-6 "
               >
                 <path
                   strokeLinecap="round"
@@ -93,6 +93,7 @@ const Sidebarfull:React.FC=()=>{
             SidebarTitle="History"
             />
             </Link>
+            <Link to ="/playlist">
           <Sidebar
             icon={
               <svg
@@ -117,7 +118,7 @@ const Sidebarfull:React.FC=()=>{
             }
             SidebarTitle="Playlist"
           />
-          
+          </Link>
           <Sidebar
             icon={
               <svg

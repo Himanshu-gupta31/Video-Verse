@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
           />
         </div>
       </div>
-      <hr className="absolute w-screen top-20 border border-t border-white"></hr>
+      <hr className="absolute w-full top-20 border border-t border-white"></hr>
     </>
   );
 };

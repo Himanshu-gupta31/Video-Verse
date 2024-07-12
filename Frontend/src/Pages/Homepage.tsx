@@ -141,8 +141,8 @@ const HomePage: React.FC = () => {
                   alt={video.title}
                   className="w-full h-40 rounded-xl mb-2 border border-gray-700"
                 />
-                <div className="flex flex-row mt-4">
-                  {userdetails && <img className="rounded-full border border-gray-500 w-12 h-12" src={userdetails.avatar} />}
+                {/* <div className="flex flex-row mt-4">
+                  {userdetails && <img className="rounded-full border border-gray-500 w-12 h-12" src={userdetails.avatar} />} */}
                   <div className="flex flex-col ml-4">
                     <h3 className="text-white text-lg font-bold">{video.title}</h3>
                     <div className="">
@@ -150,7 +150,7 @@ const HomePage: React.FC = () => {
                       <p className="text-gray-400">{video.views.length} Views</p>
                     </div>
                   </div>
-                </div>
+                {/* </div> */}
               </Link>
             ))}
           </div>

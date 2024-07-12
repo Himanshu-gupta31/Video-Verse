@@ -179,7 +179,7 @@ const Twitter: React.FC = () => {
                       {likedTweets.has(tweet._id) ? 'Liked' : 'Like'}
                     </button>
                   </div>
-                  <div className="flex justify-end items-start flex-grow relative">
+                  <div className="flex justify-end items-start flex-grow relative ">
                     <svg
                       onClick={() => toggleDropdown(index)}
                       width="24"
@@ -196,13 +196,13 @@ const Twitter: React.FC = () => {
                     {dropdownIndex === index && (
                       <div className="absolute right-0 mt-8 bg-white text-black rounded-lg shadow-lg w-48 z-20">
                         <button
-                          className="block px-4 py-2 text-left w-full hover:bg-gray-200"
+                          className="block px-4 py-2 text-left w-full hover:bg-indigo-500 hover:text-white"
                           onClick={() => EditTweet(tweet._id)} 
                         >
                           Edit Tweet
                         </button>
                         <button
-                          className="block px-4 py-2 text-left w-full hover:bg-gray-200"
+                          className="block px-4 py-2 text-left w-full hover:bg-indigo-500 hover:text-white"
                           onClick={() => DeleteTweet(tweet._id)}
                         >
                           Delete Tweet

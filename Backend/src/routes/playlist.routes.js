@@ -3,7 +3,7 @@ import {createplaylist,updateplaylist,deleteplaylist,getuserplaylist,getplaylist
 import { verifyJWT } from "../middlewares/Auth.middleware.js";
 const router=Router()
 router.use(verifyJWT)
-router.route("/").post(createplaylist)
+router.route("/createplaylist").post(createplaylist)
 router.route("/updateplaylist/u/:playlistId").patch(updateplaylist)
 router.route("/deleteplaylist/d/:playlistId").delete(deleteplaylist)
 router.route("getplaylistbyid/:playlistId").get(getplaylistbyid)
