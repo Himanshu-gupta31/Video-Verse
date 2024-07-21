@@ -14,7 +14,7 @@ const likeSchema=new Schema({
     },
     likedby:{
         type:Schema.Types.ObjectId,
-        ref:"User "
+        ref:"User"
     }
 },{timestamps:true})
 export const Like=mongoose.model("Like",likeSchema)

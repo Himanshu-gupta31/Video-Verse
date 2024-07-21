@@ -116,6 +116,6 @@ const getlikedvideos=asyncHandler(async(req,res)=>{
         throw new Apierror(404, "Couldn't find liked videos");
     }
     return res.status(200)
-    .json(new Apisuccess(200,"Fetched all the liked video successfully",{}))
+    .json(new Apisuccess(200,"Fetched all the liked video successfully",{likedVideos}))
 })
 export {togglevideoliked,togglecomment,toggletweet,getlikedvideos,checkVideoLiked}

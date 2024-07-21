@@ -119,6 +119,7 @@ const Sidebarfull:React.FC=()=>{
             SidebarTitle="Playlist"
           />
           </Link>
+          <Link to="/likes">
           <Sidebar
             icon={
               <svg
@@ -138,6 +139,7 @@ const Sidebarfull:React.FC=()=>{
             }
             SidebarTitle="Liked Videos"
           />
+          </Link>
         </div>
         </div>
         </>

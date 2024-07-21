@@ -13,6 +13,7 @@ import VideoDetail from './components/VideoDetails.tsx'
 import CreateTweet from './Pages/CreateTweet.tsx'
 import WatchHistoryPage from './Pages/WatchHistory.tsx'
 import Playlist from './Pages/Playlist.tsx'
+import Likes from './Pages/Likes.tsx'
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -27,6 +28,7 @@ const router=createBrowserRouter(
       <Route path="/createtweet" element={<CreateTweet/>}/>
       <Route path="/watchHistory" element={<WatchHistoryPage/>}/>
       <Route path='/playlist' element={<Playlist/>}/>
+      <Route path='/likes' element={<Likes/>}/>
     </Route>
   )
 )

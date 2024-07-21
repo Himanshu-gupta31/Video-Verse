@@ -62,6 +62,17 @@ const Playlist:React.FC=()=>{
          <button  className="bg-gray-500 rounded-xl w-[8rem] h-[3rem] mt-4 flex justify-center items-center">Create Playlist</button>
          </form>
          </div>
+         <div>
+            {name && description &&(
+                <div className="grid grid-cols-3">
+                <div className="border border-white w-[15rem] h-[10rem]">
+          <div>{name}</div> 
+          <div>{description}</div> 
+          </div>
+          </div>
+            )
+        }
+         </div>
        </div>
        
        </>
