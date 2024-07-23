@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 function formatDate(isoDateString: string) {
   const date = new Date(isoDateString);
@@ -19,55 +20,55 @@ function formatDate(isoDateString: string) {
 
 const VideoDetail: React.FC = () => {
   const { videoId } = useParams<{ videoId: string }>();
-  const {channelId}=useParams<string>()
+  const [channelId, setChannelId] = useState<string>("");
   const [video, setVideo] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [liked, setLiked] = useState<boolean>(false);
   const [totalViews, setTotalViews] = useState<number>(0);
-  const [subscribed,SetSubscribed]=useState<boolean>(false)
-  
-    const checkSubscription=async()=>{
-        try {
-          const response=await axios.get(`http://localhost:8000/api/v1/subscribe/checksubscription/${channelId}`,
-            {
-              withCredentials:true
-            }
-          )
-          console.log(response.data)
-        } catch (error) {
-          console.error("Failed to check Subscription")
-        }
-    }
-  
-  const Subscribed=async()=>{
+  const [subscribed, setSubscribed] = useState<boolean>();
+
+  const checkSubscription = async () => {
     try {
-      const response=await axios.post(`http://localhost:8000/api/v1/subscribe/toggle/sub/${channelId}`,
-        {},
-        {
-          withCredentials:true
-        }
-      )
-      console.log(response.data)
-      SetSubscribed(response.data.data.newSubscription)
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:8000/api/v1/subscribe/checksubscription/${channelId}`,
+        { withCredentials: true }
+      );
+      setSubscribed(response.data.message.subscribed);
+      setLoading(false);
+      //   console.log(response.data.message.subscribed);
     } catch (error) {
-      console.error("Error fetching subscribed state")
+      console.error("Failed to check subscription:", error);
     }
-  }
+  };
+
+  const toggleSubscription = async () => {
+    try {
+      setLoading(true);
+      await axios.post(
+        `http://localhost:8000/api/v1/subscribe/toggle/sub/${channelId}`,
+        {},
+        { withCredentials: true }
+      );
+      checkSubscription();
+      setLoading(false);
+    } catch (error) {
+      console.error("Error toggling subscription:", error);
+      setError("Cannot toggle subscription status!");
+    }
+  };
+
   useEffect(() => {
     const fetchVideo = async () => {
       try {
+        setLoading(true)
         const response = await axios.get(
           `http://localhost:8000/api/v1/video/${videoId}`,
-          {
-            withCredentials: true,
-            //@ts-ignore
-            credentials: "include",
-          }
+          { withCredentials: true }
         );
-
-        console.log(response.data); // Inspect the response data structure
         setVideo(response.data.data.video);
+        setChannelId(response.data.data.video.owner);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching video:", error);
@@ -80,13 +81,8 @@ const VideoDetail: React.FC = () => {
       try {
         const response = await axios.get(
           `http://localhost:8000/api/v1/likes/check/v/${videoId}`,
-          {
-            withCredentials: true,
-            //@ts-ignore
-            credentials: "include",
-          }
+          { withCredentials: true }
         );
-
         setLiked(response.data.liked);
       } catch (error) {
         console.error("Error fetching liked state:", error);
@@ -98,21 +94,21 @@ const VideoDetail: React.FC = () => {
   }, [videoId]);
 
   useEffect(() => {
+    if (channelId) {
+      checkSubscription();
+    }
+  }, [channelId]);
+
+  useEffect(() => {
     const fetchTotalViews = async () => {
       try {
-        console.log(`http://localhost:8000/api/v1/video/views/${videoId}`);
         const response = await axios.get(
           `http://localhost:8000/api/v1/video/views/${videoId}`,
-          {
-            withCredentials: true,
-            //@ts-ignore
-            credentials: "include",
-          }
+          { withCredentials: true }
         );
-        console.log("Total Views", response.data);
         setTotalViews(response.data.data.totalViews);
       } catch (error) {
-        console.error("Error fetching total views", error);
+        console.error("Error fetching total views:", error);
       }
     };
 
@@ -123,23 +119,14 @@ const VideoDetail: React.FC = () => {
 
   const toggleLike = async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:8000/api/v1/likes/toggle/v/${videoId}`,
         {},
-        {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        }
+        { withCredentials: true }
       );
-      console.log("Liked video", response.data);
       setLiked(!liked); // Toggle the liked state
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Axios error:", error.response?.data);
-      } else {
-        console.error("Unexpected error:", error);
-      }
+      console.error("Error toggling like state:", error);
     }
   };
 
@@ -148,18 +135,19 @@ const VideoDetail: React.FC = () => {
       await axios.put(
         `http://localhost:8000/api/v1/users/addToWatchHistory/${videoId}`,
         {},
-        {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        }
+        { withCredentials: true }
       );
     } catch (error) {
-      console.error("Error updating watch history", error);
+      console.error("Error updating watch history:", error);
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="opacity-50 h-screen w-screen flex justify-center items-center">
+        <LoadingSpinner />;
+      </div>
+    );
   if (error) return <p>{error}</p>;
 
   return (
@@ -179,7 +167,7 @@ const VideoDetail: React.FC = () => {
             className={`border border-white rounded-2xl w-fit flex justify-center px-4 py-2 mb-4 ${
               subscribed ? "bg-indigo-500" : "bg-transparent"
             }`}
-            onClick={Subscribed}
+            onClick={toggleSubscription}
           >
             <svg
               width="24"
@@ -194,7 +182,7 @@ const VideoDetail: React.FC = () => {
                 fill="currentColor"
               />
             </svg>
-            {subscribed ? "Subscribed" : "UnSubscribe"}
+            <p>{subscribed ? "Unsubscribe" : "Subscribe"}</p>
           </button>
           <button
             className={`border border-white rounded-2xl w-fit flex justify-center px-4 py-2 mb-4 ${
