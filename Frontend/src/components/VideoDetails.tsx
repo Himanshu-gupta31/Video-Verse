@@ -19,12 +19,41 @@ function formatDate(isoDateString: string) {
 
 const VideoDetail: React.FC = () => {
   const { videoId } = useParams<{ videoId: string }>();
+  const {channelId}=useParams<string>()
   const [video, setVideo] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [liked, setLiked] = useState<boolean>(false);
   const [totalViews, setTotalViews] = useState<number>(0);
-
+  const [subscribed,SetSubscribed]=useState<boolean>(false)
+  
+    const checkSubscription=async()=>{
+        try {
+          const response=await axios.get(`http://localhost:8000/api/v1/subscribe/checksubscription/${channelId}`,
+            {
+              withCredentials:true
+            }
+          )
+          console.log(response.data)
+        } catch (error) {
+          console.error("Failed to check Subscription")
+        }
+    }
+  
+  const Subscribed=async()=>{
+    try {
+      const response=await axios.post(`http://localhost:8000/api/v1/subscribe/toggle/sub/${channelId}`,
+        {},
+        {
+          withCredentials:true
+        }
+      )
+      console.log(response.data)
+      SetSubscribed(response.data.data.newSubscription)
+    } catch (error) {
+      console.error("Error fetching subscribed state")
+    }
+  }
   useEffect(() => {
     const fetchVideo = async () => {
       try {
@@ -146,6 +175,27 @@ const VideoDetail: React.FC = () => {
             <source src={video.videoFile} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+          <button
+            className={`border border-white rounded-2xl w-fit flex justify-center px-4 py-2 mb-4 ${
+              subscribed ? "bg-indigo-500" : "bg-transparent"
+            }`}
+            onClick={Subscribed}
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="cursor-pointer mr-2"
+            >
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                fill="currentColor"
+              />
+            </svg>
+            {subscribed ? "Subscribed" : "UnSubscribe"}
+          </button>
           <button
             className={`border border-white rounded-2xl w-fit flex justify-center px-4 py-2 mb-4 ${
               liked ? "bg-indigo-500" : "bg-transparent"

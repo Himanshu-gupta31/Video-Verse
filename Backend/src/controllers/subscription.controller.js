@@ -2,7 +2,26 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { Apierror } from "../utils/ApiError.js";
 import { Apisuccess } from "../utils/Apisuccess.js";
 import mongoose, { isValidObjectId } from "mongoose";
-import {Subscription} from "../models/subscription.model.js"
+import {Subscription} from "../models/subscription.model.js";
+const checkSubscriber=asyncHandler(async(req,res)=>{
+      const {userId}=req.user?._id
+      const {channelId}=req.params
+      if(!isValidObjectId(userId)){
+        throw new Apierror(400,"Invalid User Id")
+      }
+      const SubscribedChannel=await Subscription.findOne(
+        { 
+            subscriber:userId,
+            channel:channelId
+
+        }
+      )
+      if(!SubscribedChannel){
+        throw new Apierror(404,"Error finding subscriber")
+      }
+      return res.status(200)
+      .json(new Apisuccess(200,"Subscribed to the channel",{SubscribedChannel}))
+})
 const togglesSubscription=asyncHandler(async(req,res)=>{
     const {channelId}=req.params
     if(!isValidObjectId(channelId)){
@@ -16,7 +35,7 @@ const togglesSubscription=asyncHandler(async(req,res)=>{
     )
     if(subscription){
         await Subscription.findByIdAndDelete(subscription._id)
-        return res.status(200).json(new Apisuccess(200, "Unsubscribed successfully", {}));
+        return res.status(200).json(new Apisuccess(200, "Unsubscribed successfully", {subscription:null}));
     }
     else{
         const newSubscription=await Subscription.create({
@@ -121,4 +140,4 @@ const getSubscribedChannel=asyncHandler(async(req,res)=>{
      return res.status(200)
      .json(new Apisuccess(200,"All subscribed channel fetched successfully",{subscribed}))
 })
-export {togglesSubscription,getChannelSubscriber,getSubscribedChannel}
+export {togglesSubscription,getChannelSubscriber,getSubscribedChannel,checkSubscriber}
