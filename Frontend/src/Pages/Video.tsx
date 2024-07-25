@@ -51,7 +51,7 @@ const Video: React.FC = () => {
     return (
         <>
             <div className="bg-black text-white flex justify-center items-center h-screen">
-                <div className="p-8 bg-black border border-white h-fit shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105">
+                <div className="p-8 bg-black border border-white h-fit shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105 max-sm:w-[80%]">
                     <form onSubmit={handleSubmit}>
                         <InputBox
                             type="text"

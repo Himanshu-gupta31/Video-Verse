@@ -47,25 +47,7 @@ const HomePage: React.FC = () => {
     getUser();
   }, []);
 
-  const logoutUser = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/v1/users/logout",
-        {},
-        {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        }
-      );
-      Cookies.remove("accesstoken");
-      Cookies.remove("refreshtoken");
-      console.log("Logout Successfully", response.data);
-      navigate("/signin");
-    } catch (error) {
-      console.error("Error logging out", error);
-    }
-  };
+  
 
   return (
     <div className="bg-black w-screen h-screen overflow-y-hidden flex">
@@ -115,47 +97,42 @@ const HomePage: React.FC = () => {
         )}
       </div>
 
-      <div className="flex-shrink-0 w-36 mt-2">
+      <div className="flex-shrink-0 w-36 mt-2 max-sm:w-0">
         <div className="mt-20">
           <Sidebarfull />
         </div>
-        <div className="border-t w-[17rem] bg-slate-500"></div>
-        <button className="w-full h-[2rem] rounded-md mt-4 ml-14 font-serif text-white border border-white" onClick={logoutUser}>
-          Logout
-        </button>
+        <div className="border-t w-[17rem] bg-slate-500 max-sm:hidden"></div>
+        
       </div>
       <div className="flex-1 relative">
-        <div className="absolute left-32 top-20 bottom-0 bg-white border-l"></div>
+        <div className="absolute left-32 top-20 bottom-0 bg-white border-l max-sm:hidden"></div>
         <div className="flex justify-center mt-4">
           <input
             type="text"
             placeholder="Search"
-            className="bg-gray-700 rounded-full w-[27rem] h-[3rem] text-left p-3 hover:outline outline-white"
+            className="bg-gray-700 rounded-full w-[27rem] max-sm:w-[17rem] h-[3rem] text-left p-3 hover:outline outline-white"
           />
         </div>
         <div className="mt-8 p-4">
-          <div className="grid grid-cols-3 gap-4 ml-[8rem]">
-            {videos.map((video: any) => (
-              <Link key={video._id} to={`/video/${video._id}`} className="bg-black p-4 rounded-lg border border-white">
-                <img
-                  src={video.thumbnail}
-                  alt={video.title}
-                  className="w-full h-40 rounded-xl mb-2 border border-gray-700"
-                />
-                {/* <div className="flex flex-row mt-4">
-                  {userdetails && <img className="rounded-full border border-gray-500 w-12 h-12" src={userdetails.avatar} />} */}
-                  <div className="flex flex-col ml-4">
-                    <h3 className="text-white text-lg font-bold">{video.title}</h3>
-                    <div className="">
-                      <p className="text-gray-400">{video.description}</p>
-                      <p className="text-gray-400">{video.views.length} Views</p>
-                    </div>
-                  </div>
-                {/* </div> */}
-              </Link>
-            ))}
+  <div className="grid grid-cols-3 gap-4 ml-[8rem] max-sm:flex max-sm:flex-col max-sm:justify-center max-sm:items-center max-sm:ml-0">
+    {videos.map((video: any) => (
+      <Link key={video._id} to={`/video/${video._id}`} className="bg-black p-4 rounded-lg border border-white max-sm:w-full">
+        <img
+          src={video.thumbnail}
+          alt={video.title}
+          className="w-full h-40 rounded-xl mb-2 border border-gray-700"
+        />
+        <div className="flex flex-col ml-4">
+          <h3 className="text-white text-lg font-bold">{video.title}</h3>
+          <div className="">
+            <p className="text-gray-400">{video.description}</p>
+            <p className="text-gray-400">{video.views.length} Views</p>
           </div>
         </div>
+      </Link>
+    ))}
+  </div>
+</div>
       </div>
     </div>
   );

@@ -41,6 +41,7 @@ const Likes: React.FC = () => {
 
   return (
     <>
+    
       <div>
         <Navbar />
       </div>
@@ -48,9 +49,10 @@ const Likes: React.FC = () => {
       <div className="mt-8 w-[15rem] relative">
         <Sidebarfull />
       </div>
+      
 
       <div className="">
-        <div className="grid grid-cols-3 overflow-hidden absolute top-24 left-[17rem] ">
+        <div className="grid grid-cols-3 overflow-hidden absolute top-24 left-[17rem] max-sm:left-0">
           {likedvideos.length > 0 ? (
             likedvideos.map((video) => (
               <div key={video._id} className="bg-black p-4 rounded-lg border border-white ml-[2rem] mt-4 w-[23rem]">

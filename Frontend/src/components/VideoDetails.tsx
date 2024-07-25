@@ -153,11 +153,11 @@ const VideoDetail: React.FC = () => {
   return (
     <div className="bg-black text-white flex justify-center items-center h-screen">
       {video && (
-        <div className="p-8 border border-white rounded-lg w-3/4 h-fit">
+        <div className="p-8 border border-white rounded-lg w-3/4 h-[45rem]">
           <h1 className="text-2xl mb-4">{video.title}</h1>
           <video
             controls
-            className="w-3/4 h-3/4 mb-4"
+            className="w-3/4 h-[25rem] mb-4"
             onPlay={updateWatchHistory}
           >
             <source src={video.videoFile} type="video/mp4" />
@@ -186,7 +186,7 @@ const VideoDetail: React.FC = () => {
           </button>
           <button
             className={`border border-white rounded-2xl w-fit flex justify-center px-4 py-2 mb-4 ${
-              subscribed ? "bg-indigo-500" : "bg-transparent"
+              subscribed ? "bg-indigo-500" : "bg-white text-black"
             }`}
             onClick={toggleSubscription}
           >
