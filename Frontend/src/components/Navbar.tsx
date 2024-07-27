@@ -6,18 +6,17 @@ const Navbar: React.FC = () => {
       
       <hr className="w-full border-t border-white fixed top-0 left-0 z-10 md:hidden" />
 
-      <div className="relative w-full mt-16 md:mt-0">
+      <div className="relative w-full mt-16 max-sm:mt-4">
         
         <div className="flex justify-center px-4">
           <input
             type="text"
             placeholder="Search"
-            className="bg-gray-700 rounded-full w-full max-w-[27rem] h-[3rem] text-left p-3 hover:outline outline-white"
+            className="bg-gray-700 rounded-full w-full max-w-[27rem] h-[3rem] text-left p-3 hover:outline outline-white max-sm:w-[16rem]"
           />
         </div>
 
-        
-        <div className="hidden md:block absolute left-[16rem] top-16 bottom-0 bg-white border-l h-screen overflow-y-hidden z-0"></div>
+        <hr className="absolute w-full top-20 border border-t border-white"></hr>
       </div>
     </>
   );

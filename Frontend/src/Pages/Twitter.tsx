@@ -143,9 +143,10 @@ const Twitter: React.FC = () => {
             </div>
           )}
         </div>
-        <div className="mt-8 flex">
+        <div className="mt-8 flex ">
           <Sidebarfull />
-          <div className="ml-8 flex-grow">
+          <div className="absolute left-[16rem] top-20 bottom-0 bg-white border-l max-sm:hidden"></div>
+          <div className="ml-10 flex-grow max-sm:ml-0">
             <Link to='/createTweet'>
           <div className="mb-4 flex justify-center">
             <button className="border-2 p-4 rounded-xl border-white bg-indigo-500 my-2">
@@ -155,7 +156,7 @@ const Twitter: React.FC = () => {
             </Link>
             {alltweets.length > 0 ? (
               alltweets.map((tweet: any, index: number) => (
-                <div key={tweet._id} className="bg-black rounded-2xl border border-white mb-4 p-4 flex flex-row relative">
+                <div key={tweet._id} className="bg-black rounded-2xl border border-white mb-4 p-4 flex flex-row relative max-sm:mx-4">
                   <div className="flex-col">
                     <p className="text-gray-400 font-semibold">@{tweet.user?.username}</p>
                     <p className="text-white">{tweet.content}</p>

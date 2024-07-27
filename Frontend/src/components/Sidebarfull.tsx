@@ -102,7 +102,7 @@ const Sidebarfull: React.FC = () => {
             />
           </Link>
 
-          <div className="border-t w-full bg-slate-500 my-4"></div>
+          <div className= "border-t w-[16rem] bg-slate-500"></div>
 
           <Link to="/dashboard" onClick={() => setIsOpen(false)}>
             <Sidebar
