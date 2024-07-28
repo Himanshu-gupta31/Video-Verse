@@ -10,9 +10,8 @@ const app = express();
 // console.log(`CORS Origin: ${process.env.CORS_ORIGIN}`); // Log to check the value
 
 const allowedOrigins = [    
-    'https://videoverse-two.vercel.app/',
-  ];
-
+    'https://videoverse-two.vercel.app',
+];
   const corsOptions = {
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl requests)
