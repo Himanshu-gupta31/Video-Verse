@@ -7,36 +7,40 @@ dotenv.config();
 
 const app = express();
 
-// console.log(`CORS Origin: ${process.env.CORS_ORIGIN}`); // Log to check the value
-
 const allowedOrigins = [    
     'https://videoverse-two.vercel.app',
+    // Add your local development URL if needed, e.g.:
+    // 'http://localhost:3000',
 ];
-  const corsOptions = {
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true
-  };
 
-  app.use(cors(corsOptions));
-  app.options('*', cors(corsOptions));
-  app.use((req, res, next) => {
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://videoverse-two.vercel.app');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     next();
-  });
-  
+});
 
 app.use(express.json({ limit: "20mb" }));
-app.use(express.urlencoded({ limit: "20mb" }));
+app.use(express.urlencoded({ extended: true, limit: "20mb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
@@ -55,8 +59,9 @@ app.use("/api/v1/tweets", tweetRouter);
 app.use("/api/v1/playlist", playlistRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 app.use("/api/v1/video", videoRouter);
-app.use("/api/v1/likes",likeRouter)
-app.use("/api/v1/subscribe",subscribeRouter)
+app.use("/api/v1/likes", likeRouter);
+app.use("/api/v1/subscribe", subscribeRouter);
+
 // default route
 app.get('/', (req, res) => {
     res.send('Welcome to Video-Verse API!');
@@ -64,13 +69,12 @@ app.get('/', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
+    console.error(err.stack);
     if (err.message === 'Not allowed by CORS') {
-      res.status(403).json({error: 'CORS error: Origin not allowed'});
+        res.status(403).json({ error: 'CORS error: Origin not allowed' });
     } else {
-      console.error(err.stack);
-      res.status(500).json({error: 'Something went wrong!'});
+        res.status(500).json({ error: 'Something went wrong!' });
     }
-  });
-  
+});
 
 export { app };
