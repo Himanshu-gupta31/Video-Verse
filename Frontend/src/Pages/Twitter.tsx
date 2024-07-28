@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Sidebarfull from "../components/Sidebarfull";
-import Navbar from "../components/Navbar";
+import { Menu } from "@headlessui/react";
 import axios from "axios";
 
 const Twitter: React.FC = () => {
@@ -128,26 +128,71 @@ const Twitter: React.FC = () => {
 
   return (
     <>
-      <div className="text-white">
-        <Navbar />
-        <div className="absolute right-0 top-0 mt-4 mr-4 z-10">
-          {userdetails ? (
-            <img src={userdetails.avatar} className="rounded-full border border-white w-[3rem] h-[3rem]" alt="User Avatar" />
-          ) : (
-            <div>
-              <Link to="/signin">
-                <button className="border border-white text-white h-8 rounded-lg w-20 text-center">
-                  Sign in
-                </button>
-              </Link>
-            </div>
-          )}
-        </div>
-        <div className="mt-8 flex ">
+       <div className="bg-black w-screen h-screen  flex">
+      {/* Sidebar */}
+      <hr className="absolute w-screen top-20 border border-t border-white"></hr>
+      <div className="absolute right-0 mt-4 mr-4 z-10">
+        {userdetails ? (
+          <Menu as="div" className="relative inline-block text-left">
+            <Menu.Button>
+              <img src={userdetails.avatar} className="rounded-full border border-white w-[3rem] h-[3rem]" />
+            </Menu.Button>
+            <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right bg-white border border-gray-300 divide-y divide-gray-100 rounded-md shadow-lg outline-none ">
+              <div className="px-1 py-1 ">
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      className={`${
+                        active ? "bg-gray-100" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm hover:bg-indigo-500`}
+                      onClick={() => navigate("/video")}
+                    >
+                      Create Video
+                    </button>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      className={`${
+                        active ? "bg-gray-100" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm hover:bg-indigo-500`}
+                      onClick={() => navigate("/createtweet")}
+                    >
+                      Create Tweet
+                    </button>
+                  )}
+                </Menu.Item>
+              </div>
+            </Menu.Items>
+          </Menu>
+        ) : (
+          <div>
+            <Link to="/signin">
+              <button className="border border-white text-white h-8 rounded-lg w-20 text-center ">Sign in</button>
+            </Link>
+          </div>
+        )}
+      </div>
+
+      <div className="flex-shrink-0 w-36 mt-2 max-sm:w-0">
+        <div className="mt-20">
           <Sidebarfull />
-          <div className="absolute left-[16rem] top-20 bottom-0 bg-white border-l max-sm:hidden"></div>
-          <div className="ml-10 flex-grow max-sm:ml-0">
-            <Link to='/createTweet'>
+        </div>
+        <div className="border-t w-[17rem] bg-slate-500 max-sm:hidden"></div>
+        
+      </div>
+      <div className="flex-1 relative">
+        <div className="absolute left-32 top-20 bottom-0 bg-white border-l max-sm:hidden"></div>
+        <div className="flex justify-center mt-4">
+          <input
+            type="text"
+            placeholder="Search"
+            className="bg-gray-700 rounded-full w-[27rem] max-sm:w-[17rem] h-[3rem] text-left p-3 hover:outline outline-white"
+          />
+        </div>
+        <div className="mt-8 p-4">
+        <Link to='/createTweet'>
           <div className="mb-4 flex justify-center">
             <button className="border-2 p-4 rounded-xl border-white bg-indigo-500 my-2">
               <span className="font-semibold"> What are you thinking today?! </span>  <span className="font-bold">Tweet Now!</span>
@@ -156,7 +201,7 @@ const Twitter: React.FC = () => {
             </Link>
             {alltweets.length > 0 ? (
               alltweets.map((tweet: any, index: number) => (
-                <div key={tweet._id} className="bg-black rounded-2xl border border-white mb-4 p-4 flex flex-row relative max-sm:mx-4">
+                <div key={tweet._id} className="bg-black rounded-2xl border border-white mb-4 p-4 flex flex-row relative max-sm:mx-4 ml-[9rem]">
                   <div className="flex-col">
                     <p className="text-gray-400 font-semibold">@{tweet.user?.username}</p>
                     <p className="text-white">{tweet.content}</p>
@@ -214,11 +259,11 @@ const Twitter: React.FC = () => {
                 </div>
               ))
             ) : (
-              <p>No tweets available</p>
+              <p className="ml-[10rem] font-bold text-lg">No tweets available</p>
             )}
-          </div>
         </div>
-      </div>
+        </div>
+        </div>
     </>
   );
 };

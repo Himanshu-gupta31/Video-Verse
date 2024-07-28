@@ -106,9 +106,7 @@ const WatchHistoryPage: React.FC = () => {
           <Sidebarfull />
         </div>
         <div className="border-t w-[17rem] bg-slate-500"></div>
-        <button className="w-full h-[2rem] rounded-md mt-4 ml-14 font-serif text-white border border-white" onClick={logoutUser}>
-          Logout
-        </button>
+       
       </div>
       <div className="flex-1 relative">
         <div className="absolute left-32 top-20 bottom-0 bg-white border-l"></div>
