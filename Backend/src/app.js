@@ -4,34 +4,15 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 dotenv.config();
+const corsOrigin = process.env.CORS_ORIGIN || 'https://videoverse-two.vercel.app';
 
 const app = express();
-
-const allowedOrigins = [    
-    'https://videoverse-two.vercel.app',
-    // Add your local development URL if needed, e.g.:
-    // 'http://localhost:3000',
-];
-
-const corsOptions = {
-    origin: true,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
-};
-
-app.use(cors(corsOptions));
-
-// Handle preflight requests
-app.options('*', cors(corsOptions));
-
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', 'https://videoverse-two.vercel.app');
-//     res.header('Access-Control-Allow-Credentials', 'true');
-//     res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-//     next();
-// });
+app.use(
+    cors({
+        origin: corsOrigin,
+        credentials: true,
+    })
+);
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true, limit: "20mb" }));
@@ -61,18 +42,23 @@ app.get('/', (req, res) => {
     res.send('Welcome to Video-Verse API!');
 });
 
-// Error handling middleware
 app.use((err, req, res, next) => {
     console.error('Error details:', err);
     console.error('Request details:', {
-        method: req.method,
-        url: req.url,
-        headers: req.headers,
+      method: req.method,
+      url: req.url,
+      headers: req.headers,
     });
-    if (err.message === 'Not allowed by CORS') {
-        res.status(403).json({ error: 'CORS error: Origin not allowed' });
-    } else {
-        res.status(500).json({ error: 'Something went wrong!', details: err.message });
+    
+    if (err.name === 'UnauthorizedError') {
+      return res.status(401).json({ error: 'Authentication error', details: 'Invalid or missing token' });
     }
-});
+    
+    if (err.message === 'Not allowed by CORS') {
+      return res.status(403).json({ error: 'CORS error: Origin not allowed' });
+    }
+    
+    res.status(err.status || 500).json({ error: 'Something went wrong!', details: err.message });
+  });
+  
 export { app };
