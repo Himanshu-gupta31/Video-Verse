@@ -36,5 +36,9 @@ app.use("/api/v1/dashboard", dashboardRouter);
 app.use("/api/v1/video", videoRouter);
 app.use("/api/v1/likes",likeRouter)
 app.use("/api/v1/subscribe",subscribeRouter)
+// default route
+app.get('/', (req, res) => {
+    res.send('Welcome to Video-Verse API!');
+});
 
 export { app };
