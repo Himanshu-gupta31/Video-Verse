@@ -11,7 +11,7 @@ const allowedOrigins = [
   process.env.CORS_ORIGIN,
   'https://videoverse-two.vercel.app'
 ];
-
+console.log("")
 const corsOptions = {
   origin: (origin, callback) => {
     if (!origin) {
