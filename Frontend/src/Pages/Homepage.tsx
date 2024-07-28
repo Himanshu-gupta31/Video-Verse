@@ -14,7 +14,7 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/video", {
+        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/video", {
           withCredentials: true,
           //@ts-ignore
           credentials: "include",
@@ -32,7 +32,7 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/users/getcurrentuser", {
+        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
           withCredentials: true,
           //@ts-ignore
           credentials: "include",

@@ -25,7 +25,7 @@ const Video: React.FC = () => {
             console.log("Form Data:", formData);
     
             const response = await axios.post(
-                "http://localhost:8000/api/v1/video/publishvideo",
+                "https://video-verse-six.vercel.app/api/v1/video/publishvideo",
                 formData,
                 {
                     withCredentials: true,

@@ -26,7 +26,7 @@ const Likes: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/users/getcurrentuser", {
+        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
           withCredentials: true,
           //@ts-ignore
           credentials: "include",
@@ -43,7 +43,7 @@ const Likes: React.FC = () => {
   useEffect(() => {
     const fetchLikedVideos = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/likes/videos", {
+        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/likes/videos", {
           withCredentials: true
         });
 

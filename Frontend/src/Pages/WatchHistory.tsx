@@ -27,7 +27,7 @@ const WatchHistoryPage: React.FC = () => {
   useEffect(() => {
     const getWatchedVideos = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/users/history",
+        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/history",
           {
           withCredentials: true,
           //@ts-ignore
@@ -48,7 +48,7 @@ const WatchHistoryPage: React.FC = () => {
    useEffect(()=>{
       const getUser=async ()=>{
         try {
-          const response=await axios.get("http://localhost:8000/api/v1/users/getcurrentuser",
+          const response=await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser",
             {
               withCredentials:true,
               //@ts-ignore
@@ -66,24 +66,24 @@ const WatchHistoryPage: React.FC = () => {
       
    },[])
    
-    const logoutUser=async()=>{
-      try {
-        const response=await axios.post("http://localhost:8000/api/v1/users/logout",
-          {},
-          {
-            withCredentials: true,
-            //@ts-ignore
-            credentials: 'include',
-          }
-        )
-        Cookies.remove("accesstoken")
-        Cookies.remove("refreshtoken")
-        console.log("Logout Succesfully",response.data)
-        navigate("/signin")
-      } catch (error) {
-         console.error("Error logging out",error)
-      }
-    }
+    // const logoutUser=async()=>{
+    //   try {
+    //     const response=await axios.post("https://video-verse-six.vercel.app/api/v1/users/logout",
+    //       {},
+    //       {
+    //         withCredentials: true,
+    //         //@ts-ignore
+    //         credentials: 'include',
+    //       }
+    //     )
+    //     Cookies.remove("accesstoken")
+    //     Cookies.remove("refreshtoken")
+    //     console.log("Logout Succesfully",response.data)
+    //     navigate("/signin")
+    //   } catch (error) {
+    //      console.error("Error logging out",error)
+    //   }
+    // }
     
    
   return (

@@ -14,7 +14,7 @@ const CreateTweet: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/users/getcurrentuser", {
+        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
           withCredentials: true,
           //@ts-ignore
           credentials: "include",
@@ -31,7 +31,7 @@ const CreateTweet: React.FC = () => {
   const postTweetData = async () => {
     try {
       const response = await axios.post(
-        'http://localhost:8000/api/v1/tweets/tweet',
+        'https://video-verse-six.vercel.app/api/v1/tweets/tweet',
         {
           content: content,
         },

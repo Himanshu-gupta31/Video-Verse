@@ -16,7 +16,7 @@ const Twitter: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/users/getcurrentuser", {
+        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
           withCredentials: true,
           //@ts-ignore
           credentials: "include",
@@ -34,7 +34,7 @@ const Twitter: React.FC = () => {
   const EditTweet = async (tweetId:string) => {
     try {
       const response = await axios.patch(
-        `http://localhost:8000/api/v1/tweets/updatetweet/u/${tweetId}`,
+        `https://video-verse-six.vercel.app/api/v1/tweets/updatetweet/u/${tweetId}`,
         {}, 
         {
           withCredentials: true,
@@ -52,7 +52,7 @@ const Twitter: React.FC = () => {
   const DeleteTweet = async (tweetId:string) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8000/api/v1/tweets/deletetweet/d/${tweetId}`,
+        `https://video-verse-six.vercel.app/api/v1/tweets/deletetweet/d/${tweetId}`,
         
         {
           withCredentials: true,
@@ -71,7 +71,7 @@ const Twitter: React.FC = () => {
   useEffect(() => {
     const getTweets = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/tweets/alltweets", {
+        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/tweets/alltweets", {
           withCredentials: true,
           //@ts-ignore
           credentials: "include",
@@ -97,7 +97,7 @@ const Twitter: React.FC = () => {
   };
    const getLikedTweet=async(tweetId:string)=>{
     try {
-      const response=await axios.post(`http://localhost:8000/api/v1/likes/toggle/c/${tweetId}`,
+      const response=await axios.post(`https://video-verse-six.vercel.app/api/v1/likes/toggle/c/${tweetId}`,
         {},
         {
           withCredentials: true,

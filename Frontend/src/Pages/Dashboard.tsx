@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
       try {
         if (videoIds.length > 0) {
           const response = await axios.get(
-            `http://localhost:8000/api/v1/video/views/${videoIds.join(',')}`,
+            `https://video-verse-six.vercel.app/api/v1/video/views/${videoIds.join(',')}`,
             { withCredentials: true }
           );
           setTotalViews(response.data.data.totalViews);
@@ -36,7 +36,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/users/getcurrentuser", {
+        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
           withCredentials: true,
           //@ts-ignore
           credentials: "include",
@@ -54,7 +54,7 @@ const Dashboard: React.FC = () => {
     const getChannelTotalVideos = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/v1/dashboard/dashboard/videos",
+          "https://video-verse-six.vercel.app/api/v1/dashboard/dashboard/videos",
           {
             withCredentials: true,
           }
@@ -72,7 +72,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/users/getcurrentuser", {
+        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
           withCredentials: true,
         });
         console.log("Current User Details", response.data);
@@ -91,7 +91,7 @@ const Dashboard: React.FC = () => {
       try {
         if (channelId) {
           const response = await axios.get(
-            `http://localhost:8000/api/v1/subscribe/getchannel/sub/${channelId}`,
+            `https://video-verse-six.vercel.app/api/v1/subscribe/getchannel/sub/${channelId}`,
             {
               withCredentials: true,
             }

@@ -32,7 +32,7 @@ const VideoDetail: React.FC = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:8000/api/v1/subscribe/checksubscription/${channelId}`,
+        `https://video-verse-six.vercel.app/api/v1/subscribe/checksubscription/${channelId}`,
         { withCredentials: true }
       );
       setSubscribed(response.data.message.subscribed);
@@ -47,7 +47,7 @@ const VideoDetail: React.FC = () => {
     try {
       setLoading(true);
       await axios.post(
-        `http://localhost:8000/api/v1/subscribe/toggle/sub/${channelId}`,
+        `https://video-verse-six.vercel.app/api/v1/subscribe/toggle/sub/${channelId}`,
         {},
         { withCredentials: true }
       );
@@ -64,7 +64,7 @@ const VideoDetail: React.FC = () => {
       try {
         setLoading(true)
         const response = await axios.get(
-          `http://localhost:8000/api/v1/video/${videoId}`,
+          `https://video-verse-six.vercel.app/api/v1/video/${videoId}`,
           { withCredentials: true }
         );
         setVideo(response.data.data.video);
@@ -80,7 +80,7 @@ const VideoDetail: React.FC = () => {
     const fetchLikedState = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/likes/check/v/${videoId}`,
+          `https://video-verse-six.vercel.app/api/v1/likes/check/v/${videoId}`,
           { withCredentials: true }
         );
         setLiked(response.data.liked);
@@ -103,7 +103,7 @@ const VideoDetail: React.FC = () => {
     const fetchTotalViews = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/video/views/${videoId}`,
+          `https://video-verse-six.vercel.app/api/v1/video/views/${videoId}`,
           { withCredentials: true }
         );
         setTotalViews(response.data.data.totalViews);
@@ -120,7 +120,7 @@ const VideoDetail: React.FC = () => {
   const toggleLike = async () => {
     try {
       await axios.post(
-        `http://localhost:8000/api/v1/likes/toggle/v/${videoId}`,
+        `https://video-verse-six.vercel.app/api/v1/likes/toggle/v/${videoId}`,
         {},
         { withCredentials: true }
       );
@@ -133,7 +133,7 @@ const VideoDetail: React.FC = () => {
   const updateWatchHistory = async () => {
     try {
       await axios.put(
-        `http://localhost:8000/api/v1/users/addToWatchHistory/${videoId}`,
+        `https://video-verse-six.vercel.app/api/v1/users/addToWatchHistory/${videoId}`,
         {},
         { withCredentials: true }
       );

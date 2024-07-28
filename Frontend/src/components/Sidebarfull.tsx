@@ -15,7 +15,7 @@ const Sidebarfull: React.FC = () => {
   const logoutUser = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/users/logout",
+        "https://video-verse-six.vercel.app/api/v1/users/logout",
         {},
         {
           withCredentials: true,
