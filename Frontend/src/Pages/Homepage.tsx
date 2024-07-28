@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import Sidebarfull from "../components/Sidebarfull";
 import axios from "axios";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 const HomePage: React.FC = () => {
   const [videos, setVideos] = useState<any[]>([]);
