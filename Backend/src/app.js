@@ -26,6 +26,14 @@ const allowedOrigins = [
   };
 
   app.use(cors(corsOptions));
+  app.options('*', cors(corsOptions));
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    next();
+  });
+  
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ limit: "20mb" }));
@@ -53,5 +61,16 @@ app.use("/api/v1/subscribe",subscribeRouter)
 app.get('/', (req, res) => {
     res.send('Welcome to Video-Verse API!');
 });
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    if (err.message === 'Not allowed by CORS') {
+      res.status(403).json({error: 'CORS error: Origin not allowed'});
+    } else {
+      console.error(err.stack);
+      res.status(500).json({error: 'Something went wrong!'});
+    }
+  });
+  
 
 export { app };
