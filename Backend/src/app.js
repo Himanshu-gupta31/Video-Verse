@@ -7,12 +7,27 @@ dotenv.config();
 
 const app = express();
 
-console.log(`CORS Origin: ${process.env.CORS_ORIGIN}`); // Log to check the value
+// console.log(`CORS Origin: ${process.env.CORS_ORIGIN}`); // Log to check the value
 
-app.use(cors({
-    origin: process.env.CORS_ORIGIN,
+const allowedOrigins = [
+    process.env.CORS_ORIGIN,
+    'https://videoverse-two.vercel.app/',
+  ];
+
+  const corsOptions = {
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true
-}));
+  };
+
+  app.use(cors(corsOptions));
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ limit: "20mb" }));
