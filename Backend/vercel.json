@@ -1,19 +1,15 @@
 {
     "version": 2,
     "builds": [
-      {
-        "src": "src/**/*.js",
-        "use": "@vercel/node",
-        "config": {
-          "includeFiles": ["src/**/*"],
-          "maxLambdaSize": "15mb"
+        {
+            "src": "./index.js",
+            "use": "@vercel/node"
         }
-      }
     ],
     "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "src/index.js"
-      }
+        {
+            "src": "/(.*)",
+            "dest": "/"
+        }
     ]
-  }
+}
