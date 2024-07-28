@@ -71,9 +71,9 @@ app.get('/', (req, res) => {
 app.use((err, req, res, next) => {
     console.error(err.stack);
     if (err.message === 'Not allowed by CORS') {
-        res.status(403).json({ error: 'CORS error: Origin not allowed' });
+        res.status(403).json({ error: 'CORS error: Origin not allowed'});
     } else {
-        res.status(500).json({ error: 'Something went wrong!' });
+        res.status(500).json({ error: 'Something went wrong!',err });
     }
 });
 
