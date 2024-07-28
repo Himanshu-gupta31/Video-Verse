@@ -9,16 +9,16 @@ const HomePage: React.FC = () => {
   const [videos, setVideos] = useState<any[]>([]);
   const [userdetails, SetUserDetails] = useState<any>("");
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/video", {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        });
+        const response = await axios.get(
+          "https://video-verse-six.vercel.app/api/v1/video",
+          {
+            withCredentials: true,
+          }
+        );
         console.log("API response all videos:", response.data);
         setVideos(response.data.data.data);
       } catch (error) {
@@ -32,11 +32,12 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        });
+        const response = await axios.get(
+          "https://video-verse-six.vercel.app/api/v1/users/getcurrentuser",
+          {
+            withCredentials: true,
+          }
+        );
         console.log("Current User Details", response.data);
         SetUserDetails(response.data.message);
       } catch (error) {
@@ -47,8 +48,6 @@ const HomePage: React.FC = () => {
     getUser();
   }, []);
 
-  
-
   return (
     <div className="bg-black w-screen h-screen overflow-y-hidden flex">
       {/* Sidebar */}
@@ -57,7 +56,10 @@ const HomePage: React.FC = () => {
         {userdetails ? (
           <Menu as="div" className="relative inline-block text-left">
             <Menu.Button>
-              <img src={userdetails.avatar} className="rounded-full border border-white w-[3rem] h-[3rem]" />
+              <img
+                src={userdetails.avatar}
+                className="rounded-full border border-white w-[3rem] h-[3rem]"
+              />
             </Menu.Button>
             <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right bg-white border border-gray-300 divide-y divide-gray-100 rounded-md shadow-lg outline-none ">
               <div className="px-1 py-1 ">
@@ -91,7 +93,9 @@ const HomePage: React.FC = () => {
         ) : (
           <div>
             <Link to="/signin">
-              <button className="border border-white text-white h-8 rounded-lg w-20 text-center ">Sign in</button>
+              <button className="border border-white text-white h-8 rounded-lg w-20 text-center ">
+                Sign in
+              </button>
             </Link>
           </div>
         )}
@@ -102,7 +106,6 @@ const HomePage: React.FC = () => {
           <Sidebarfull />
         </div>
         <div className="border-t w-[17rem] bg-slate-500 max-sm:hidden"></div>
-        
       </div>
       <div className="flex-1 relative">
         <div className="absolute left-32 top-20 bottom-0 bg-white border-l max-sm:hidden"></div>
@@ -114,25 +117,31 @@ const HomePage: React.FC = () => {
           />
         </div>
         <div className="mt-8 p-4">
-  <div className="grid grid-cols-3 gap-4 ml-[8rem] max-sm:flex max-sm:flex-col max-sm:justify-center max-sm:items-center max-sm:ml-0">
-    {videos.map((video: any) => (
-      <Link key={video._id} to={`/video/${video._id}`} className="bg-black p-4 rounded-lg border border-white max-sm:w-full">
-        <img
-          src={video.thumbnail}
-          alt={video.title}
-          className="w-full h-40 rounded-xl mb-2 border border-gray-700"
-        />
-        <div className="flex flex-col ml-4">
-          <h3 className="text-white text-lg font-bold">{video.title}</h3>
-          <div className="">
-            <p className="text-gray-400">{video.description}</p>
-            <p className="text-gray-400">{video.views.length} Views</p>
+          <div className="grid grid-cols-3 gap-4 ml-[8rem] max-sm:flex max-sm:flex-col max-sm:justify-center max-sm:items-center max-sm:ml-0">
+            {videos.map((video: any) => (
+              <Link
+                key={video._id}
+                to={`/video/${video._id}`}
+                className="bg-black p-4 rounded-lg border border-white max-sm:w-full"
+              >
+                <img
+                  src={video.thumbnail}
+                  alt={video.title}
+                  className="w-full h-40 rounded-xl mb-2 border border-gray-700"
+                />
+                <div className="flex flex-col ml-4">
+                  <h3 className="text-white text-lg font-bold">
+                    {video.title}
+                  </h3>
+                  <div className="">
+                    <p className="text-gray-400">{video.description}</p>
+                    <p className="text-gray-400">{video.views.length} Views</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
-      </Link>
-    ))}
-  </div>
-</div>
       </div>
     </div>
   );
