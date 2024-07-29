@@ -32,7 +32,11 @@ const Signup: React.FC = () => {
     }
 
     try {
-      const response = await newRequest.post("/users/register", formData);
+      const response = await newRequest.post("/users/register", 
+        {
+          
+          formData      
+    });
       console.log("Sign-up successful:", response.data);
       navigate("/");
       // Handle successful sign-up (e.g., redirect to login page)
