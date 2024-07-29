@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import { Link, useNavigate } from "react-router-dom";
-import {newRequest} from "../utils/request.ts"
-
+import { newRequest } from "../utils/request.ts";
 
 const Signup: React.FC = () => {
   const [fullname, setFullname] = useState("");
@@ -12,7 +11,7 @@ const Signup: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [avatar, setAvatar] = useState<File | null>(null);
   const [coverImage, setCoverImage] = useState<File | null>(null);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const postSignUpData = async () => {
     const formData = new FormData();
@@ -33,20 +32,9 @@ const Signup: React.FC = () => {
     }
 
     try {
-      const response = await newRequest.post(
-        "/users/register",
-        
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-         
-        },
-       
-      );
+      const response = await newRequest.post("/users/register", formData);
       console.log("Sign-up successful:", response.data);
-      navigate("/")
+      navigate("/");
       // Handle successful sign-up (e.g., redirect to login page)
     } catch (error: any) {
       console.error("Error signing up!", error);
