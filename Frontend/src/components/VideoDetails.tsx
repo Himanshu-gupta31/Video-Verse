@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { LoadingSpinner } from "./LoadingSpinner";
+import { newRequest } from "../utils/request";
 
 function formatDate(isoDateString: string) {
   const date = new Date(isoDateString);
@@ -31,9 +31,8 @@ const VideoDetail: React.FC = () => {
   const checkSubscription = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        `https://video-verse-six.vercel.app/api/v1/subscribe/checksubscription/${channelId}`,
-        { withCredentials: true }
+      const response = await newRequest.get(
+        `/subscribe/checksubscription/${channelId}`
       );
       setSubscribed(response.data.message.subscribed);
       setLoading(false);
@@ -46,11 +45,7 @@ const VideoDetail: React.FC = () => {
   const toggleSubscription = async () => {
     try {
       setLoading(true);
-      await axios.post(
-        `https://video-verse-six.vercel.app/api/v1/subscribe/toggle/sub/${channelId}`,
-        {},
-        { withCredentials: true }
-      );
+      await newRequest.post(`/subscribe/toggle/sub/${channelId}`, {});
       checkSubscription();
       setLoading(false);
     } catch (error) {
@@ -62,11 +57,8 @@ const VideoDetail: React.FC = () => {
   useEffect(() => {
     const fetchVideo = async () => {
       try {
-        setLoading(true)
-        const response = await axios.get(
-          `https://video-verse-six.vercel.app/api/v1/video/${videoId}`,
-          { withCredentials: true }
-        );
+        setLoading(true);
+        const response = await newRequest.get(`/video/${videoId}`);
         setVideo(response.data.data.video);
         setChannelId(response.data.data.video.owner);
         setLoading(false);
@@ -79,10 +71,7 @@ const VideoDetail: React.FC = () => {
 
     const fetchLikedState = async () => {
       try {
-        const response = await axios.get(
-          `https://video-verse-six.vercel.app/api/v1/likes/check/v/${videoId}`,
-          { withCredentials: true }
-        );
+        const response = await newRequest.get(`/likes/check/v/${videoId}`);
         setLiked(response.data.liked);
       } catch (error) {
         console.error("Error fetching liked state:", error);
@@ -102,10 +91,7 @@ const VideoDetail: React.FC = () => {
   useEffect(() => {
     const fetchTotalViews = async () => {
       try {
-        const response = await axios.get(
-          `https://video-verse-six.vercel.app/api/v1/video/views/${videoId}`,
-          { withCredentials: true }
-        );
+        const response = await newRequest.get(`/video/views/${videoId}`);
         setTotalViews(response.data.data.totalViews);
       } catch (error) {
         console.error("Error fetching total views:", error);
@@ -119,11 +105,7 @@ const VideoDetail: React.FC = () => {
 
   const toggleLike = async () => {
     try {
-      await axios.post(
-        `https://video-verse-six.vercel.app/api/v1/likes/toggle/v/${videoId}`,
-        {},
-        { withCredentials: true }
-      );
+      await newRequest.post(`/likes/toggle/v/${videoId}`, {});
       setLiked(!liked); // Toggle the liked state
     } catch (error) {
       console.error("Error toggling like state:", error);
@@ -132,11 +114,7 @@ const VideoDetail: React.FC = () => {
 
   const updateWatchHistory = async () => {
     try {
-      await axios.put(
-        `https://video-verse-six.vercel.app/api/v1/users/addToWatchHistory/${videoId}`,
-        {},
-        { withCredentials: true }
-      );
+      await newRequest.put(`/users/addToWatchHistory/${videoId}`, {});
     } catch (error) {
       console.error("Error updating watch history:", error);
     }
@@ -205,7 +183,6 @@ const VideoDetail: React.FC = () => {
             </svg>
             <p>{subscribed ? "Unsubscribe" : "Subscribe"}</p>
           </button>
-          
 
           <p>{video.description}</p>
           <p className="text-gray-400">
