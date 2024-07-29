@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import {newRequest} from "../utils/request.ts"
 import Cookies from "js-cookie";
 
 const Sidebarfull: React.FC = () => {
@@ -14,14 +14,10 @@ const Sidebarfull: React.FC = () => {
 
   const logoutUser = async () => {
     try {
-      const response = await axios.post(
-        "https://video-verse-six.vercel.app/api/v1/users/logout",
+      const response = await newRequest.post(
+        "/users/logout",
         {},
-        {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        }
+        
       );
       Cookies.remove("accesstoken");
       Cookies.remove("refreshtoken");
