@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebarfull from "../components/Sidebarfull";
-import axios from "axios";
+import {newRequest} from "../utils/request.ts"
+
 // import Cookies from "js-cookie";
 
 function formatDate(isoDateString:string) {
@@ -27,12 +28,8 @@ const WatchHistoryPage: React.FC = () => {
   useEffect(() => {
     const getWatchedVideos = async () => {
       try {
-        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/history",
-          {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: 'include',
-        });
+        const response = await newRequest.get("/users/history",
+         );
         console.log("API response:", response.data);
 
         // Set videos state with the array of videos
@@ -48,12 +45,8 @@ const WatchHistoryPage: React.FC = () => {
    useEffect(()=>{
       const getUser=async ()=>{
         try {
-          const response=await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser",
-            {
-              withCredentials:true,
-              //@ts-ignore
-              credentials: 'include'
-            }
+          const response=await newRequest.get("/users/getcurrentuser",
+            
           );
           console.log("Current User Details",response.data)
           SetUserDetails(response.data.message)

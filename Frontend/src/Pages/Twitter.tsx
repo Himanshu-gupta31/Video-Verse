@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Sidebarfull from "../components/Sidebarfull";
 import { Menu } from "@headlessui/react";
-import axios from "axios";
+import {newRequest} from "../utils/request.ts"
+
 
 const Twitter: React.FC = () => {
   const [alltweets, setAllTweets] = useState<any[]>([]);
@@ -16,11 +17,8 @@ const Twitter: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        });
+        const response = await newRequest.get("/users/getcurrentuser", 
+         );
         console.log("Current User Details", response.data);
         setUserDetails(response.data.message);
       } catch (error) {
@@ -33,14 +31,10 @@ const Twitter: React.FC = () => {
 
   const EditTweet = async (tweetId:string) => {
     try {
-      const response = await axios.patch(
-        `https://video-verse-six.vercel.app/api/v1/tweets/updatetweet/u/${tweetId}`,
+      const response = await newRequest.patch(
+        `/tweets/updatetweet/u/${tweetId}`,
         {}, 
-        {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        }
+       
       );
       console.log("Edited tweet", response.data);
       navigate("/createtweet");
@@ -51,14 +45,10 @@ const Twitter: React.FC = () => {
   
   const DeleteTweet = async (tweetId:string) => {
     try {
-      const response = await axios.delete(
-        `https://video-verse-six.vercel.app/api/v1/tweets/deletetweet/d/${tweetId}`,
+      const response = await newRequest.delete(
+        `/tweets/deletetweet/d/${tweetId}`,
         
-        {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        }
+       
       );
       console.log("Deleted tweet", response.data);
       
@@ -71,11 +61,8 @@ const Twitter: React.FC = () => {
   useEffect(() => {
     const getTweets = async () => {
       try {
-        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/tweets/alltweets", {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        });
+        const response = await newRequest.get("/tweets/alltweets", 
+        );
         console.log("All Tweets", response.data);
         setAllTweets(response.data.data.alltweets); 
       } catch (error) {
@@ -97,13 +84,9 @@ const Twitter: React.FC = () => {
   };
    const getLikedTweet=async(tweetId:string)=>{
     try {
-      const response=await axios.post(`https://video-verse-six.vercel.app/api/v1/likes/toggle/c/${tweetId}`,
+      const response=await newRequest.post(`/likes/toggle/c/${tweetId}`,
         {},
-        {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        }
+        
       )
       console.log("Liked tweet",response.data)
       setLikedTweets(prevLikedTweets => {

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import {newRequest} from "../utils/request.ts"
+
 
 const Signin: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -12,15 +13,13 @@ const Signin: React.FC = () => {
 
   const postSigninData = async () => {
     try {
-      const response = await axios.post(
-        "https://video-verse-six.vercel.app/api/v1/users/login",
+      const response = await newRequest.post(
+        "/users/login",
         {
           email: email,
           password: password,
         },
-        {
-          withCredentials: true,
-        }
+      
       );
       console.log("Sign-in Successful", response.data);
       const { accesstoken, refreshtoken } = response.data.message;

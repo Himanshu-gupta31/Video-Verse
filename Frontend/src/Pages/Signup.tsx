@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import {newRequest} from "../utils/request.ts"
+
 
 const Signup: React.FC = () => {
   const [fullname, setFullname] = useState("");
@@ -32,8 +33,8 @@ const Signup: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(
-        "https://video-verse-six.vercel.app/api/v1/users/register",
+      const response = await newRequest.post(
+        "/users/register",
         
         formData,
         {

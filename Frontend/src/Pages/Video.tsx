@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import {newRequest} from "../utils/request.ts"
+
 
 const Video: React.FC = () => {
     const [title, SetTitle] = useState('');
@@ -24,14 +25,10 @@ const Video: React.FC = () => {
             // Log formData to inspect its contents before making the request
             console.log("Form Data:", formData);
     
-            const response = await axios.post(
-                "https://video-verse-six.vercel.app/api/v1/video/publishvideo",
+            const response = await newRequest.post(
+                "/video/publishvideo",
                 formData,
-                {
-                    withCredentials: true,
-                    //@ts-ignore
-                    credentials: "include"
-                }
+                
             );
             console.log("Video fetched successfully", response);
             navigate("/");

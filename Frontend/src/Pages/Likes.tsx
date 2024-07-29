@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebarfull from "../components/Sidebarfull";
 import { Link,useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
-import axios from "axios";
+import {newRequest} from "../utils/request.ts"
 
 interface Video {
   _id: string;
@@ -26,11 +26,8 @@ const Likes: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        });
+        const response = await newRequest.get("/users/getcurrentuser", 
+         );
         console.log("Current User Details", response.data);
         SetUserDetails(response.data.message);
       } catch (error) {
@@ -43,9 +40,7 @@ const Likes: React.FC = () => {
   useEffect(() => {
     const fetchLikedVideos = async () => {
       try {
-        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/likes/videos", {
-          withCredentials: true
-        });
+        const response = await newRequest.get("/likes/videos");
 
         const likedVideoGroups = response.data.data.likedVideos;
         const flattenedLikedVideos = likedVideoGroups.flatMap((group: any) => group.like);

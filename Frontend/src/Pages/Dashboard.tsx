@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { DashboardComponent } from "../components/DashboardComponent";
-import axios from "axios";
 import { useNavigate,Link } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import Sidebarfull from "../components/Sidebarfull";
@@ -51,11 +50,8 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const getChannelTotalVideos = async () => {
       try {
-        const response = await axios.get(
-          "https://video-verse-six.vercel.app/api/v1/dashboard/dashboard/videos",
-          {
-            withCredentials: true,
-          }
+        const response = await newRequest.get(
+          "/dashboard/dashboard/videos"
         );
         console.log("Total Videos", response.data);
         setTotalVideos(response.data.data.channelVideo);
@@ -70,9 +66,8 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
-          withCredentials: true,
-        });
+        const response = await newRequest.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser"
+        );
         console.log("Current User Details", response.data);
         setUserDetails(response.data.message);
         setChannelId(response.data.message._id);
@@ -88,11 +83,9 @@ const Dashboard: React.FC = () => {
     const getChannelSubs = async () => {
       try {
         if (channelId) {
-          const response = await axios.get(
-            `https://video-verse-six.vercel.app/api/v1/subscribe/getchannel/sub/${channelId}`,
-            {
-              withCredentials: true,
-            }
+          const response = await newRequest.get(
+            `/subscribe/getchannel/sub/${channelId}`,
+            
           );
           console.log(response.data);
           setTotalSubs(response.data.data.subscriber);

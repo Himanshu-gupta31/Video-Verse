@@ -1,9 +1,10 @@
-import axios from "axios";
 import React, { useState,useEffect } from "react";
 import { InputBox } from "../components/InputBox";
 import { Link,useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import Sidebarfull from "../components/Sidebarfull";
+import {newRequest} from "../utils/request.ts"
+
 
 
 
@@ -17,11 +18,7 @@ const Playlist: React.FC = () => {
     useEffect(() => {
         const getUser = async () => {
           try {
-            const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
-              withCredentials: true,
-              //@ts-ignore
-              credentials: "include",
-            });
+            const response = await newRequest.get("/users/getcurrentuser",);
             console.log("Current User Details", response.data);
             SetUserDetails(response.data.message);
           } catch (error) {
@@ -33,17 +30,12 @@ const Playlist: React.FC = () => {
       }, []);
     const createPlaylist = async () => {
         try {
-            const response = await axios.post(
-                "https://video-verse-six.vercel.app/api/v1/playlist/createplaylist",
+            const response = await newRequest.post(
+                "/playlist/createplaylist",
                 {
                     name: name,
                     description: description
                 },
-                {
-                    withCredentials: true,
-                    //@ts-ignore
-                    credentials: 'include'
-                }
             );
             console.log("Create Playlist", response.data);
             
