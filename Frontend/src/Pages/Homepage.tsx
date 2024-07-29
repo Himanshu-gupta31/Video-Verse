@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import Sidebarfull from "../components/Sidebarfull";
 import axios from "axios";
+import Cookies from "js-cookie";
+
 // import Cookies from "js-cookie";
 
 const HomePage: React.FC = () => {
@@ -36,8 +38,11 @@ const HomePage: React.FC = () => {
           "https://video-verse-six.vercel.app/api/v1/users/getcurrentuser",
           {
             withCredentials: true,
-          }
-        );
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              Authorization: `Bearer ${Cookies.get("accesstoken")}`,
+            },
+          });
         console.log("Current User Details", response.data);
         SetUserDetails(response.data.message);
       } catch (error) {
