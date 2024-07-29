@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import Sidebarfull from "../components/Sidebarfull";
-import axios from "axios";
-import Cookies from "js-cookie";
+import {newRequest} from "../utils/request.ts"
+
 
 // import Cookies from "js-cookie";
 
@@ -15,11 +15,10 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get(
-          "https://video-verse-six.vercel.app/api/v1/video",
-          {
-            withCredentials: true,
-          }
+        const response = await newRequest.get(
+          "/video",
+          
+          
         );
         console.log("API response all videos:", response.data);
         setVideos(response.data.data.data);
@@ -34,15 +33,9 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get(
-          "https://video-verse-six.vercel.app/api/v1/users/getcurrentuser",
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              Authorization: `Bearer ${Cookies.get("accesstoken")}`,
-            },
-          });
+        const response = await newRequest.get(
+          "/users/getcurrentuser",
+         );
         console.log("Current User Details", response.data);
         SetUserDetails(response.data.message);
       } catch (error) {

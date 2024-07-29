@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate,Link } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import Sidebarfull from "../components/Sidebarfull";
+import {newRequest} from "../utils/request.ts"
 
 const Dashboard: React.FC = () => {
   const [videoIds, setVideoIds] = useState<string[]>([]);
@@ -20,9 +21,9 @@ const Dashboard: React.FC = () => {
     const fetchTotalViews = async () => {
       try {
         if (videoIds.length > 0) {
-          const response = await axios.get(
-            `https://video-verse-six.vercel.app/api/v1/video/views/${videoIds.join(',')}`,
-            { withCredentials: true }
+          const response = await newRequest.get(
+            `/video/views/${videoIds.join(',')}`,
+            
           );
           setTotalViews(response.data.data.totalViews);
         }
@@ -36,11 +37,8 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        });
+        const response = await newRequest.get("/users/getcurrentuser", 
+         );
         console.log("Current User Details", response.data);
         SetUserDetails(response.data.message);
       } catch (error) {

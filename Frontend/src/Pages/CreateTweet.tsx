@@ -1,9 +1,8 @@
 import React, { useState,useEffect } from 'react';
- 
-import axios from 'axios';
 import Sidebarfull from '../components/Sidebarfull';
 import { Link,useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
+import {newRequest} from "../utils/request.ts"
 
 const CreateTweet: React.FC = () => {
   const [content, setContent] = useState('');
@@ -14,11 +13,8 @@ const CreateTweet: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser", {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: "include",
-        });
+        const response = await newRequest.get("/users/getcurrentuser", 
+         );
         console.log("Current User Details", response.data);
         SetUserDetails(response.data.message);
       } catch (error) {
@@ -30,16 +26,12 @@ const CreateTweet: React.FC = () => {
   }, []);
   const postTweetData = async () => {
     try {
-      const response = await axios.post(
-        'https://video-verse-six.vercel.app/api/v1/tweets/tweet',
+      const response = await newRequest.post(
+        '/tweets/tweet',
         {
           content: content,
         },
-        {
-          withCredentials: true,
-          //@ts-ignore
-          credentials: 'include',
-        }
+        
       );
       console.log('Twitted Successfully', response.data);
       navigate("/twitter")
