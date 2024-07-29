@@ -119,40 +119,46 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Apierror(400, "Avatar file is compulsory");
   }
 
-  // Upload avatar to Vercel Blob
-  const avatarBlob = await put(`avatars/${username}-${Date.now()}.${avatarFile.originalname.split('.').pop()}`, avatarFile.buffer, {
-    access: 'public',
-  });
-
-  let coverImageBlob;
-  if (coverImageFile) {
-    coverImageBlob = await put(`coverimages/${username}-${Date.now()}.${coverImageFile.originalname.split('.').pop()}`, coverImageFile.buffer, {
+  try {
+    // Upload avatar to Vercel Blob
+    const avatarBlob = await put(`avatars/${username}-${Date.now()}.${avatarFile.originalname.split('.').pop()}`, avatarFile.buffer, {
       access: 'public',
+      token: process.env.BLOB_READ_WRITE_TOKEN
     });
+
+    let coverImageBlob;
+    if (coverImageFile) {
+      coverImageBlob = await put(`coverimages/${username}-${Date.now()}.${coverImageFile.originalname.split('.').pop()}`, coverImageFile.buffer, {
+        access: 'public',
+        token: process.env.BLOB_READ_WRITE_TOKEN
+      });
+    }
+
+    const user = await User.create({
+      fullname,
+      email,
+      password,
+      avatar: avatarBlob.url,
+      coverimage: coverImageBlob?.url || "",
+      username: username.toLowerCase(),
+    });
+
+    const createdUser = await User.findById(user._id).select(
+      "-password -refreshToken"
+    );
+
+    if (!createdUser) {
+      throw new Apierror(500, "Something went wrong while registering the user");
+    }
+
+    return res
+      .status(201)
+      .json(new Apisuccess(200, "User is registered successfully", createdUser));
+  } catch (error) {
+    console.error("Error during user registration:", error);
+    throw new Apierror(500, "Error during file upload or user creation");
   }
-
-  const user = await User.create({
-    fullname,
-    email,
-    password,
-    avatar: avatarBlob.url,
-    coverimage: coverImageBlob?.url || "",
-    username: username.toLowerCase(),
-  });
-
-  const createdUser = await User.findById(user._id).select(
-    "-password -refreshToken"
-  );
-
-  if (!createdUser) {
-    throw new Apierror(500, "Something went wrong while registering the user");
-  }
-
-  return res
-    .status(201)
-    .json(new Apisuccess(200, "User is registered successfully", createdUser));
 });
-
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
