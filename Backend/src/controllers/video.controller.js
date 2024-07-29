@@ -4,6 +4,8 @@ import { Apisuccess } from "../utils/Apisuccess.js";
 import { Video } from "../models/video.model.js";
 import { uploadOncloudinary } from "../utils/Cloudinary.js";
 import { isValidObjectId } from "mongoose";
+import { put } from '@vercel/blob';
+
 
 const getAllVideos = asyncHandler(async (req, res) => {
   const {
@@ -40,17 +42,15 @@ const getAllVideos = asyncHandler(async (req, res) => {
     const totalVideos = await Video.countDocuments(filter);
 
     // Send the response
-    res
-      .status(200)
-      .json(
-        new Apisuccess(200, "Data send successfully", {
-          success: true,
-          data: videos,
-          totalVideos,
-          totalPages: Math.ceil(totalVideos / limitNumber),
-          currentPage: pageNumber,
-        }),
-      );
+    res.status(200).json(
+      new Apisuccess(200, "Data send successfully", {
+        success: true,
+        data: videos,
+        totalVideos,
+        totalPages: Math.ceil(totalVideos / limitNumber),
+        currentPage: pageNumber,
+      }),
+    );
   } catch (error) {
     res
       .status(500)
@@ -58,50 +58,109 @@ const getAllVideos = asyncHandler(async (req, res) => {
   }
 });
 
+// // publish video controller function
+// const publishVideo = asyncHandler(async (req, res) => {
+//   const { title, description } = req.body;
+//   console.log(title);
+//   console.log(description);
+//   console.log(req.body);
+//   if (!title || title.length === 0) {
+//     throw new Apierror(400, "Title field cannot be empty");
+//   }
+//   if (!description || description.length === 0) {
+//     throw new Apierror(400, "Description cannot be empty");
+//   }
+//   let videoFilepath = req.files?.videoFile[0].path;
+//   let thumbnailPath = req.files?.thumbnail[0].path;
+//   if (!videoFilepath) {
+//     throw new Apierror(400, "No video uploaded");
+//   }
+//   if (!thumbnailPath) {
+//     throw new Apierror(400, "No thumbnail found");
+//   }
+//   const video = await uploadOncloudinary(videoFilepath);
+//   const thumbnail = await uploadOncloudinary(thumbnailPath);
+//   console.log(thumbnail);
+//   if (!video) {
+//     throw new Apierror(400, "Video should be added compulsory");
+//   }
+//   if (!thumbnail) {
+//     throw new Apierror(400, "Video should be added compulsory");
+//   }
+//   const uploadvideo = await Video.create({
+//     title: title,
+//     owner: req.user?._id,
+//     description: description,
+//     videoFile: video.url,
+//     thumbnail: thumbnail.url,
+//     duration: video.duration,
+//     isPublished: true,
+//   });
+//   if (!uploadvideo) {
+//     throw new Apierror(404, "Couldnt upload the video");
+//   }
+//   return res
+//     .status(200)
+//     .json(new Apisuccess(200, "Video uplaoded successfully", { uploadvideo }));
+// });
+
 const publishVideo = asyncHandler(async (req, res) => {
-  const { title, description } = req.body;
-  console.log(title);
-  console.log(description);
-  console.log(req.body);
+  const { title, description, isPublished } = req.body;
+  
   if (!title || title.length === 0) {
     throw new Apierror(400, "Title field cannot be empty");
   }
   if (!description || description.length === 0) {
     throw new Apierror(400, "Description cannot be empty");
   }
-  let videoFilepath = req.files?.videoFile[0].path;
-  let thumbnailPath = req.files?.thumbnail[0].path;
-  if (!videoFilepath) {
+
+  const videoFile = req.files?.videoFile?.[0];
+  const thumbnailFile = req.files?.thumbnail?.[0];
+
+  if (!videoFile) {
     throw new Apierror(400, "No video uploaded");
   }
-  if (!thumbnailPath) {
+  if (!thumbnailFile) {
     throw new Apierror(400, "No thumbnail found");
   }
-  const video = await uploadOncloudinary(videoFilepath);
-  const thumbnail = await uploadOncloudinary(thumbnailPath);
-  console.log(thumbnail);
-  if (!video) {
-    throw new Apierror(400, "Video should be added compulsory");
+
+  try {
+    // Upload video to Vercel Blob
+    const video = await put(`videos/${Date.now()}-${videoFile.originalname}`, videoFile.buffer, {
+      access: 'public',
+      token: process.env.BLOB_READ_WRITE_TOKEN
+    });
+
+    // Upload thumbnail to Vercel Blob
+    const thumbnail = await put(`thumbnails/${Date.now()}-${thumbnailFile.originalname}`, thumbnailFile.buffer, {
+      access: 'public',
+      token: process.env.BLOB_READ_WRITE_TOKEN
+    });
+
+    const uploadvideo = await Video.create({
+      title,
+      owner: req.user?._id,
+      description,
+      videoFile: video.url,
+      thumbnail: thumbnail.url,
+      duration: video.duration, // Note: You might need to calculate this separately
+      isPublished: isPublished === 'true',
+    });
+
+    if (!uploadvideo) {
+      throw new Apierror(404, "Couldn't upload the video");
+    }
+
+    return res
+      .status(200)
+      .json(new Apisuccess(200, "Video uploaded successfully", { uploadvideo }));
+  } catch (error) {
+    console.error("Error during video upload:", error);
+    throw new Apierror(500, "Error during file upload or video creation");
   }
-  if (!thumbnail) {
-    throw new Apierror(400, "Video should be added compulsory");
-  }
-  const uploadvideo = await Video.create({
-    title: title,
-    owner: req.user?._id,
-    description: description,
-    videoFile: video.url,
-    thumbnail: thumbnail.url,
-    duration: video.duration,
-    isPublished: true,
-  });
-  if (!uploadvideo) {
-    throw new Apierror(404, "Couldnt upload the video");
-  }
-  return res
-    .status(200)
-    .json(new Apisuccess(200, "Video uplaoded successfully", { uploadvideo }));
 });
+
+
 const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
   if (!isValidObjectId(videoId)) {
@@ -178,13 +237,11 @@ const updateTitleAndDescription = asyncHandler(async (req, res) => {
   if (!updatetitleanddescription) {
     throw new Apierror(400, "Title and description could not be updated");
   }
-  return res
-    .status(200)
-    .json(
-      new Apisuccess(200, "Title and description updated successully", {
-        updatetitleanddescription,
-      }),
-    );
+  return res.status(200).json(
+    new Apisuccess(200, "Title and description updated successully", {
+      updatetitleanddescription,
+    }),
+  );
 });
 
 const deleteVideo = asyncHandler(async (req, res) => {
@@ -234,7 +291,11 @@ const viewsinvideo = asyncHandler(async (req, res) => {
 
     const totalViews = video.views.length;
 
-    return res.status(200).json(new Apisuccess(200, "Total views fetched successfully", { totalViews }));
+    return res
+      .status(200)
+      .json(
+        new Apisuccess(200, "Total views fetched successfully", { totalViews }),
+      );
   } catch (error) {
     console.error(error);
     return res.status(500).json(new Apierror(500, "Internal Server Error"));
@@ -285,5 +346,5 @@ export {
   updateTitleAndDescription,
   deleteVideo,
   togglePublishedStatus,
-  viewsinvideo
+  viewsinvideo,
 };
