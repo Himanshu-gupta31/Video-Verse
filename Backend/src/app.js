@@ -55,27 +55,5 @@ app.get("/", (req, res) => {
   res.send("Welcome to Video-Verse API!");
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error("Error details:", err);
-  console.error("Request details:", {
-    method: req.method,
-    url: req.url,
-    headers: req.headers,
-  });
-
-  if (err.name === "UnauthorizedError") {
-    return res.status(401).json({
-      error: "Authentication error",
-      details: "Invalid or missing token",
-    });
-  }
-
-  if (err.message === "Not allowed by CORS") {
-    return res.status(403).json({ error: "CORS error: Origin not allowed" });
-  }
-
-  res.status(err.status || 500).json({ error: "Something went wrong!", details: err.message });
-});
 
 export { app };
