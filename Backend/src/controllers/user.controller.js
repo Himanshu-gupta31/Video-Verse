@@ -20,6 +20,8 @@ const generaterefreshandaccesstoken = async (userId) => {
     );
   }
 };
+
+
 const registerUser = asyncHandler(async (req, res) => {
   const { fullname, email, username, password } = req.body;
 
@@ -41,6 +43,8 @@ const registerUser = asyncHandler(async (req, res) => {
   if (existeduser) {
     throw new Apierror(409, "User already exists ");
   }
+
+  console.log("Request files: ", req.files);
   // const avatarlocalpath= req.files?.avatar[0]?.path;
   let avatarlocalpath;
 
@@ -87,6 +91,8 @@ const registerUser = asyncHandler(async (req, res) => {
     .status(201)
     .json(new Apisuccess(200, "User is registered successfully ", createduser));
 });
+
+
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email) {
@@ -330,21 +336,25 @@ const getuserchannelprofile = asyncHandler(async (req, res) => {
     .json(new Apisuccess(200, channel[0], "User channel fetched successfully"));
 });
 
-const addVideoToWatchHistory = asyncHandler(async(req,res) => {
-    const {videoId} = req.params;
-    const user = await User.findById(req.user._id);
+const addVideoToWatchHistory = asyncHandler(async (req, res) => {
+  const { videoId } = req.params;
+  const user = await User.findById(req.user._id);
 
-    if (!user) {
-        return Apierror(401,"Unauthorized.")
-    }
+  if (!user) {
+    return Apierror(401, "Unauthorized.");
+  }
 
-    if (!user.watchHistory.includes(videoId)) {
-        user.watchHistory.push(videoId);
-        await user.save()
-    }
+  if (!user.watchHistory.includes(videoId)) {
+    user.watchHistory.push(videoId);
+    await user.save();
+  }
 
-    return res.status(200).json(new Apisuccess(200,`${videoId} added to watch history for ${user._id}`))
-})
+  return res
+    .status(200)
+    .json(
+      new Apisuccess(200, `${videoId} added to watch history for ${user._id}`),
+    );
+});
 
 const watchHistory = asyncHandler(async (req, res) => {
   const user = await User.aggregate([
@@ -376,7 +386,7 @@ const watchHistory = asyncHandler(async (req, res) => {
                 },
                 {
                   $addFields: {
-                    owner: { $arrayElemAt: ["$owner", 0] }
+                    owner: { $arrayElemAt: ["$owner", 0] },
                   },
                 },
               ],
@@ -410,5 +420,5 @@ export {
   changecoverimage,
   getuserchannelprofile,
   watchHistory,
-  addVideoToWatchHistory
+  addVideoToWatchHistory,
 };

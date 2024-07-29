@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
+import axios from "axios";
+import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
-import { newRequest } from "../utils/request.ts";
 
 const Signup: React.FC = () => {
   const [fullname, setFullname] = useState("");
@@ -32,17 +33,31 @@ const Signup: React.FC = () => {
     }
 
     try {
-      const response = await newRequest.post("/users/register", 
+      const response = await axios.post(
+        "https://video-verse-six.vercel.app/api/v1/users/register",
+        formData,
         {
-          
-          formData      
-    });
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       console.log("Sign-up successful:", response.data);
+      const { accesstoken, refreshtoken } = response.data.message;
+
+      // Set the JWT token cookie using js-cookie
+      Cookies.set("accesstoken", accesstoken, { expires: 1, path: "/", secure: true, sameSite: 'strict' });
+      Cookies.set("refreshtoken", refreshtoken, { expires: 10, path: "/", secure: true, sameSite: 'strict' });
+
       navigate("/");
       // Handle successful sign-up (e.g., redirect to login page)
     } catch (error: any) {
       console.error("Error signing up!", error);
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         setError(error.response.data.message);
       } else {
         setError("Error signing up! Please try again later.");
