@@ -7,12 +7,11 @@ export const formDataRequest = axios.create({
   withCredentials: true,
   headers: {
     "Content-Type": "multipart/form-data",
-    Authorization: `Bearer ${Cookies.get("accesstoken")}`,
   },
 });
 
-// // Interceptor to update the token before each request
-// formDataRequest.interceptors.request.use((config) => {
-//   config.headers.Authorization = `Bearer ${Cookies.get("accesstoken")}`;
-//   return config;
-// });
+// Interceptor to update the token before each request
+formDataRequest.interceptors.request.use((config) => {
+  config.headers.Authorization = `Bearer ${Cookies.get("accesstoken")}`;
+  return config;
+});
