@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "engines": {
-        "node": "20.x"
-    },
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js",
     "start": "node src/index.js"
@@ -22,6 +22,7 @@
     "prettier": "^3.2.5"
   },
   "dependencies": {
+    "@vercel/blob": "^0.23.4",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.2.0",
     "cookie-parser": "^1.4.6",

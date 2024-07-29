@@ -4,7 +4,10 @@ import { User } from "../models/user.model.js";
 import { uploadOncloudinary } from "../utils/Cloudinary.js";
 import { Apisuccess } from "../utils/Apisuccess.js";
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
+import mongoose from "mongoose"
+import { put } from '@vercel/blob';
+
+;
 const generaterefreshandaccesstoken = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -22,74 +25,132 @@ const generaterefreshandaccesstoken = async (userId) => {
 };
 
 
+// const registerUser = asyncHandler(async (req, res) => {
+//   const { fullname, email, username, password } = req.body;
+
+//   if (fullname === "") {
+//     throw new Apierror(400, "Fullname is required");
+//   }
+//   if (email === "") {
+//     throw new Apierror(400, "Email is required");
+//   }
+//   if (username === "") {
+//     throw new Apierror(400, "username is required");
+//   }
+//   if (password === "") {
+//     throw new Apierror(400, "password is required");
+//   }
+//   const existeduser = await User.findOne({
+//     $or: [{ username }, { email }],
+//   });
+//   if (existeduser) {
+//     throw new Apierror(409, "User already exists ");
+//   }
+
+//   console.log("Request files: ", req.files);
+//   // const avatarlocalpath= req.files?.avatar[0]?.path;
+//   let avatarlocalpath;
+
+//   if (
+//     req.files &&
+//     Array.isArray(req.files.avatar) &&
+//     req.files.avatar.length > 0
+//   ) {
+//     avatarlocalpath = req.files.avatar[0].path;
+//   }
+
+//   let coverimagelocalpath;
+//   if (
+//     req.files &&
+//     Array.isArray(req.files.coverimage) &&
+//     req.files.coverimage.length > 0
+//   ) {
+//     coverimagelocalpath = req.files.coverimage[0].path;
+//   }
+
+//   if (!avatarlocalpath) {
+//     throw new Apierror(400, "Avatar file is compulsory ");
+//   }
+//   const avatar = await uploadOncloudinary(avatarlocalpath);
+//   const coverimage = await uploadOncloudinary(coverimagelocalpath);
+//   if (!avatar) {
+//     throw new Apierror(400, "Avatar file is compulsory ");
+//   }
+//   const user = await User.create({
+//     fullname,
+//     email,
+//     password,
+//     avatar: avatar.url,
+//     coverimage: coverimage?.url || "",
+//     username: username.toLowerCase(),
+//   });
+//   const createduser = await User.findById(user._id).select(
+//     "-password -refreshToken",
+//   );
+//   if (!createduser) {
+//     throw new Apierror(500, "Something went wrong while registering the user");
+//   }
+//   return res
+//     .status(201)
+//     .json(new Apisuccess(200, "User is registered successfully ", createduser));
+// });
+
 const registerUser = asyncHandler(async (req, res) => {
   const { fullname, email, username, password } = req.body;
 
-  if (fullname === "") {
-    throw new Apierror(400, "Fullname is required");
-  }
-  if (email === "") {
-    throw new Apierror(400, "Email is required");
-  }
-  if (username === "") {
-    throw new Apierror(400, "username is required");
-  }
-  if (password === "") {
-    throw new Apierror(400, "password is required");
-  }
-  const existeduser = await User.findOne({
+  // Validation checks
+  if (!fullname) throw new Apierror(400, "Fullname is required");
+  if (!email) throw new Apierror(400, "Email is required");
+  if (!username) throw new Apierror(400, "Username is required");
+  if (!password) throw new Apierror(400, "Password is required");
+
+  const existedUser = await User.findOne({
     $or: [{ username }, { email }],
   });
-  if (existeduser) {
-    throw new Apierror(409, "User already exists ");
+  if (existedUser) {
+    throw new Apierror(409, "User already exists");
   }
 
-  console.log("Request files: ", req.files);
-  // const avatarlocalpath= req.files?.avatar[0]?.path;
-  let avatarlocalpath;
+  // Handle file uploads
+  const avatarFile = req.files?.avatar?.[0];
+  const coverImageFile = req.files?.coverimage?.[0];
 
-  if (
-    req.files &&
-    Array.isArray(req.files.avatar) &&
-    req.files.avatar.length > 0
-  ) {
-    avatarlocalpath = req.files.avatar[0].path;
+  if (!avatarFile) {
+    throw new Apierror(400, "Avatar file is compulsory");
   }
 
-  let coverimagelocalpath;
-  if (
-    req.files &&
-    Array.isArray(req.files.coverimage) &&
-    req.files.coverimage.length > 0
-  ) {
-    coverimagelocalpath = req.files.coverimage[0].path;
+  // Upload avatar to Vercel Blob
+  const avatarBlob = await put(`avatars/${username}-${Date.now()}.${avatarFile.originalname.split('.').pop()}`, avatarFile.buffer, {
+    access: 'public',
+  });
+
+  let coverImageBlob;
+  if (coverImageFile) {
+    coverImageBlob = await put(`coverimages/${username}-${Date.now()}.${coverImageFile.originalname.split('.').pop()}`, coverImageFile.buffer, {
+      access: 'public',
+    });
   }
 
-  if (!avatarlocalpath) {
-    throw new Apierror(400, "Avatar file is compulsory ");
-  }
-  const avatar = await uploadOncloudinary(avatarlocalpath);
-  const coverimage = await uploadOncloudinary(coverimagelocalpath);
-  if (!avatar) {
-    throw new Apierror(400, "Avatar file is compulsory ");
-  }
   const user = await User.create({
     fullname,
     email,
     password,
-    avatar: avatar.url,
-    coverimage: coverimage?.url || "",
+    avatar: avatarBlob.url,
+    coverimage: coverImageBlob?.url || "",
     username: username.toLowerCase(),
   });
-  const createduser = await User.findById(user._id).select(
-    "-password -refreshToken",
+
+  const createdUser = await User.findById(user._id).select(
+    "-password -refreshToken"
   );
-  if (!createduser) {
+
+  if (!createdUser) {
     throw new Apierror(500, "Something went wrong while registering the user");
   }
+
   return res
     .status(201)
-    .json(new Apisuccess(200, "User is registered successfully ", createduser));
+    .json(new Apisuccess(200, "User is registered successfully", createdUser));
 });
 
 
