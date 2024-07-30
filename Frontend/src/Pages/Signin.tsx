@@ -22,12 +22,10 @@ const Signin: React.FC = () => {
       
       );
       console.log("Sign-in Successful", response.data);
-      const { accesstoken, refreshtoken } = response.data.message;
+      
 
       // Set the JWT token cookie using js-cookie
-      Cookies.set("accesstoken", accesstoken, { expires: 1, path: "/", secure: true, sameSite: 'strict' });
-      Cookies.set("refreshtoken", refreshtoken, { expires: 10, path: "/", secure: true, sameSite: 'strict' });
-
+      
       navigate("/");
     } catch (error) {
       console.error("Error signing in", error);
