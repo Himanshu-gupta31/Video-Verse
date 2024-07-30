@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
 
 const Signup: React.FC = () => {
@@ -43,11 +42,7 @@ const Signup: React.FC = () => {
         }
       );
       console.log("Sign-up successful:", response.data);
-      const { accesstoken, refreshtoken } = response.data.message;
-
-      // Set the JWT token cookie using js-cookie
-      Cookies.set("accesstoken", accesstoken, { expires: 1, path: "/", secure: true, sameSite: 'strict' });
-      Cookies.set("refreshtoken", refreshtoken, { expires: 10, path: "/", secure: true, sameSite: 'strict' });
+ 
 
       navigate("/");
       // Handle successful sign-up (e.g., redirect to login page)

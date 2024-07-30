@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import {newRequest} from "../utils/request.ts"
 
 
