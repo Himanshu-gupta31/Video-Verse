@@ -34,7 +34,7 @@ const Signup: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://video-verse-six.vercel.app/api/v1/users/register",
+        "https://video-verse-4.onrender.com/api/v1/users/register",
         formData,
         {
           headers: {
