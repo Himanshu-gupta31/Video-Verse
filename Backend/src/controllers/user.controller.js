@@ -156,6 +156,11 @@ const registerUser = asyncHandler(async (req, res) => {
   const createduser = await User.findById(user._id).select(
     "-password -refreshToken",
   );
+
+  const { refreshtoken, accesstoken } = await generaterefreshandaccesstoken(
+    user._id,
+  );
+
   const options = {
     httpOnly: false,
     secure: true,
@@ -165,7 +170,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Apierror(500, "Something went wrong while registering the user");
   }
   return res
-    .status(201)
+    .status(200)
     .cookie("accesstoken", accesstoken, options)
     .cookie("refreshtoken", refreshtoken, options)
     .json(new Apisuccess(200, "User is registered successfully ", createduser));
@@ -211,6 +216,8 @@ const loginUser = asyncHandler(async (req, res) => {
       ),
     );
 });
+
+
 const logoutuser = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     req.user._id,
