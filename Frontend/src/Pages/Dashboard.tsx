@@ -9,58 +9,59 @@ const Dashboard: React.FC = () => {
   const [videoIds, setVideoIds] = useState<string[]>([]);
   const [totalVideos, setTotalVideos] = useState<any[]>([]);
   const [userDetails, setUserDetails] = useState<any>(null);
-  const [totalViews, setTotalViews] = useState<number>(0);
-  const [totalSubs, setTotalSubs] = useState<any[]>([]);
+  // const [totalViews, setTotalViews] = useState<number>(0);
+  const [totalSubs, setTotalSubs] = useState<number>(0);
   const navigate = useNavigate();
   const [error, setError] = useState<null | string>(null);
   const [channelId, setChannelId] = useState<string>("");
+  console.log(videoIds)
+  // useEffect(() => {
+  //   const fetchTotalViews = async () => {
+  //     try {
+  //       if (videoIds.length > 0) {
+  //         const response = await newRequest.get(
+  //           `/video/views/${videoIds.join(",")}`
+  //         );
+  //         setTotalViews(response.data.data.totalViews);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching total views:", error);
+  //       setError("Error fetching total views.");
+  //     }
+  //   };
 
-  useEffect(() => {
-    const fetchTotalViews = async () => {
-      try {
-        if (videoIds.length > 0) {
-          const response = await newRequest.get(
-            `/video/views/${videoIds.join(",")}`
-          );
-          setTotalViews(response.data.data.totalViews);
-        }
-      } catch (error) {
-        console.error("Error fetching total views:", error);
-      }
-    };
-
-    fetchTotalViews();
-  }, [videoIds]);
+  //   fetchTotalViews();
+  // }, [videoIds]);
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const response = await newRequest.get("/users/getcurrentuser");
-        // console.log("Current User Details", response.data);
         setUserDetails(response.data.message);
         setChannelId(response.data.message._id);
       } catch (error) {
-        console.error("Error Getting User Detailed", error);
+        console.error("Error Getting User Details", error);
         navigate("/signin");
       }
     };
     getUser();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const getChannelTotalVideos = async () => {
       try {
         const response = await newRequest.get("/dashboard/dashboard/videos");
-        // console.log("Total Videos", response.data);
-        if (response.data.numberOfVideos == 0) {
-          setError("No Videos uploaded by you!");
+        if (response.data.data.statusCode === 410) {
+          setError(response.data.data.message.message);
+          setTotalVideos([]);
+          setVideoIds([]);
+        } else {
+          setTotalVideos(response.data.data.channelVideo);
+          setVideoIds(response.data.data.channelVideo.map((video: any) => video._id));
         }
-        setTotalVideos(response.data.data.channelVideo);
-        setVideoIds(
-          response.data.data.channelVideo.map((video: any) => video._id)
-        );
       } catch (error) {
         console.error("Error Fetching Total Videos", error);
+        setError("Error fetching total videos.");
       }
     };
     getChannelTotalVideos();
@@ -73,11 +74,11 @@ const Dashboard: React.FC = () => {
           const response = await newRequest.get(
             `/subscribe/getchannel/sub/${channelId}`
           );
-          // console.log(response.data);
-          setTotalSubs(response.data.data.subscriber);
+          setTotalSubs(response.data.data.numberOfSubscribers);
         }
       } catch (error) {
         console.error("Error fetching Channel Subscriber", error);
+        setError("Error fetching channel subscribers.");
       }
     };
     getChannelSubs();
@@ -181,21 +182,21 @@ const Dashboard: React.FC = () => {
               <div className="grid grid-cols-3 ml-8 ">
                 <div className="w-[16rem] h-[6rem] border border-white text-center mt-8 text-white">
                   <DashboardComponent heading="Total Subscriber" />
-                  <p>{totalSubs.length}</p>
+                  <p>{totalSubs}</p>
                 </div>
                 <div className="w-[16rem] h-[6rem] border border-white text-center mt-8 text-white flex-col">
                   <DashboardComponent heading="Total Videos" />
-                  <p>{totalVideos.length}</p>
+                  <p>{totalVideos.length > 0 ? totalVideos.length : 0}</p>
                 </div>
-
+{/* 
                 <div className="w-[16rem] h-[6rem] border border-white text-center mt-8 text-white">
                   <DashboardComponent heading="Total Views" />
                   <p>{totalViews}</p>
-                </div>
+                </div> */}
               </div>
               {error && (
                 <div>
-                  <p>{error}</p>
+                  <p className="text-red-500">{error}</p>
                 </div>
               )}
             </div>
