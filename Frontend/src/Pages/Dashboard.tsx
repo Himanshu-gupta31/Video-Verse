@@ -12,7 +12,6 @@ const Dashboard: React.FC = () => {
   const [totalViews, setTotalViews] = useState<number>(0);
   const [totalSubs, setTotalSubs] = useState<any[]>([]);
   const navigate = useNavigate();
-  const [userdetails, SetUserDetails] = useState<any>("");
   const [error, setError] = useState<null | string>(null);
   const [channelId, setChannelId] = useState<string>("");
 
@@ -32,12 +31,14 @@ const Dashboard: React.FC = () => {
 
     fetchTotalViews();
   }, [videoIds]);
+
   useEffect(() => {
     const getUser = async () => {
       try {
         const response = await newRequest.get("/users/getcurrentuser");
         // console.log("Current User Details", response.data);
-        SetUserDetails(response.data.message);
+        setUserDetails(response.data.message);
+        setChannelId(response.data.message._id);
       } catch (error) {
         console.error("Error Getting User Detailed", error);
         navigate("/signin");
@@ -45,6 +46,7 @@ const Dashboard: React.FC = () => {
     };
     getUser();
   }, []);
+
   useEffect(() => {
     const getChannelTotalVideos = async () => {
       try {
@@ -62,23 +64,6 @@ const Dashboard: React.FC = () => {
       }
     };
     getChannelTotalVideos();
-  }, []);
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await newRequest.get(
-          "https://video-verse-six.vercel.app/api/v1/users/getcurrentuser"
-        );
-        // console.log("Current User Details", response.data);
-        setUserDetails(response.data.message);
-        setChannelId(response.data.message._id);
-      } catch (error) {
-        console.error("Error Getting User Details", error);
-        navigate("/signin");
-      }
-    };
-    getUser();
   }, []);
 
   useEffect(() => {
@@ -104,11 +89,11 @@ const Dashboard: React.FC = () => {
         {/* Sidebar */}
         <hr className="absolute w-screen top-20 border border-t border-white"></hr>
         <div className="absolute right-0 mt-4 mr-4 z-10">
-          {userdetails ? (
+          {userDetails ? (
             <Menu as="div" className="relative inline-block text-left">
               <Menu.Button>
                 <img
-                  src={userdetails.avatar}
+                  src={userDetails.avatar}
                   className="rounded-full border border-white w-[3rem] h-[3rem]"
                 />
               </Menu.Button>

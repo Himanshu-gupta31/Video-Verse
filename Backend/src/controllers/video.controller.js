@@ -5,8 +5,6 @@ import { Video } from "../models/video.model.js";
 import { uploadOncloudinary } from "../utils/Cloudinary.js";
 import { isValidObjectId } from "mongoose";
 
-
-
 const getAllVideos = asyncHandler(async (req, res) => {
   const {
     page = 1,
@@ -64,7 +62,7 @@ const publishVideo = asyncHandler(async (req, res) => {
   console.log(title);
   console.log(description);
   console.log(req.body);
-  console.log(req.files)
+  console.log(req.files);
   if (!title || title.length === 0) {
     throw new Apierror(400, "Title field cannot be empty");
   }
@@ -104,9 +102,6 @@ const publishVideo = asyncHandler(async (req, res) => {
     .status(200)
     .json(new Apisuccess(200, "Video uplaoded successfully", { uploadvideo }));
 });
-
-
-
 
 const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
@@ -208,6 +203,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
     .status(200)
     .json(new Apisuccess(200, "Video deleted successfully", { deletevideo }));
 });
+
 const viewsinvideo = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
   const userId = req.user?._id;
@@ -249,14 +245,7 @@ const viewsinvideo = asyncHandler(async (req, res) => {
   }
 });
 
-// const increaseviews=asyncHandler(async(req,res)=>{
-//   const {videoId}=req.params;
-//   const {userId}=req.body?._id
-//  if(!(isValidObjectId(userId))){
-//   throw new Apierror(404,"Invalid user Id")
-//  }
 
-// })
 const togglePublishedStatus = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
   if (!isValidObjectId(videoId)) {

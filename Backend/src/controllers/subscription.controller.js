@@ -65,6 +65,8 @@ const togglesSubscription = asyncHandler(async (req, res) => {
       .json(new Apisuccess(200, "Subscribed succesfully", { newSubscription }));
   }
 });
+
+
 const getChannelSubscriber = asyncHandler(async (req, res) => {
   const { channelId } = req.params;
   if (!isValidObjectId(channelId)) {
@@ -103,7 +105,10 @@ const getChannelSubscriber = asyncHandler(async (req, res) => {
     },
   ]);
   if (!subscriber || subscriber.length === 0) {
-    throw new Apierror(404, "Couldnt get channel subscribers");
+    throw new Apisuccess(201, {
+      numberOfSubscribers : 0,
+      message : 'Correctly fetching subscriber count!'
+    });
   }
   return res.status(200).json(
     new Apisuccess(200, "All subscribed fetched successfully", {
@@ -111,6 +116,8 @@ const getChannelSubscriber = asyncHandler(async (req, res) => {
     }),
   );
 });
+
+
 const getSubscribedChannel = asyncHandler(async (req, res) => {
   const { subscriberId } = req.params;
   if (!isValidObjectId(subscriberId)) {
