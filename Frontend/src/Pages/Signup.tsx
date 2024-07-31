@@ -34,13 +34,16 @@ const Signup: React.FC = () => {
 
     try {
       const response = await axios.post(
-        `https://video-verse-4.onrender.com/api/v1/users/register`,
+        'https://video-verse-4.onrender.com/api/v1/users/register',
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
-        })
+          withCredentials: true,
+        }
+      );
+      
       console.log("Sign-up successful:", response.data);
  
 
