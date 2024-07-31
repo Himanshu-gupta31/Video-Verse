@@ -32,7 +32,7 @@ const router=createBrowserRouter(
     </Route>
   )
 )
-
+export const baseUrl="https://video-verse-4.onrender.com"
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <RouterProvider router={router}/>

@@ -1,9 +1,10 @@
 import axios from "axios";
+import { baseUrl } from "../main";
 
 
 
 export const newRequest = axios.create({
-  baseURL: "https://video-verse-4.onrender.com/api/v1",
+  baseURL: `${baseUrl}/api/v1`,
   withCredentials: true,
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
