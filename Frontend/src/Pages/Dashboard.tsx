@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
       try {
         const response = await newRequest.get("/users/getcurrentuser", 
          );
-        console.log("Current User Details", response.data);
+        // console.log("Current User Details", response.data);
         SetUserDetails(response.data.message);
       } catch (error) {
         console.error("Error Getting User Detailed", error);
@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
         const response = await newRequest.get(
           "/dashboard/dashboard/videos"
         );
-        console.log("Total Videos", response.data);
+        // console.log("Total Videos", response.data);
         setTotalVideos(response.data.data.channelVideo);
         setVideoIds(response.data.data.channelVideo.map((video: any) => video._id));
       } catch (error) {
@@ -68,7 +68,7 @@ const Dashboard: React.FC = () => {
       try {
         const response = await newRequest.get("https://video-verse-six.vercel.app/api/v1/users/getcurrentuser"
         );
-        console.log("Current User Details", response.data);
+        // console.log("Current User Details", response.data);
         setUserDetails(response.data.message);
         setChannelId(response.data.message._id);
       } catch (error) {
@@ -87,7 +87,7 @@ const Dashboard: React.FC = () => {
             `/subscribe/getchannel/sub/${channelId}`,
             
           );
-          console.log(response.data);
+          // console.log(response.data);
           setTotalSubs(response.data.data.subscriber);
         }
       } catch (error) {

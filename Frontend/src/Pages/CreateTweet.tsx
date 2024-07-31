@@ -15,7 +15,7 @@ const CreateTweet: React.FC = () => {
       try {
         const response = await newRequest.get("/users/getcurrentuser", 
          );
-        console.log("Current User Details", response.data);
+        // console.log("Current User Details", response.data);
         SetUserDetails(response.data.message);
       } catch (error) {
         console.error("Error Getting User Detailed", error);
@@ -26,14 +26,14 @@ const CreateTweet: React.FC = () => {
   }, []);
   const postTweetData = async () => {
     try {
-      const response = await newRequest.post(
+      await newRequest.post(
         '/tweets/tweet',
         {
           content: content,
         },
         
       );
-      console.log('Twitted Successfully', response.data);
+      // console.log('Twitted Successfully', response.data);
       navigate("/twitter")
     } catch (error) {
       console.log('Something went wrong while publishing tweet', error);

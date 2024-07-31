@@ -44,7 +44,7 @@ const Signup: React.FC = () => {
       console.log("Sign-up successful:", response.data);
  
 
-      navigate("/");
+      navigate("/signin");
       // Handle successful sign-up (e.g., redirect to login page)
     } catch (error: any) {
       console.error("Error signing up!", error);

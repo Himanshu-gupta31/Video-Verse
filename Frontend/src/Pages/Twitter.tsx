@@ -19,7 +19,7 @@ const Twitter: React.FC = () => {
       try {
         const response = await newRequest.get("/users/getcurrentuser", 
          );
-        console.log("Current User Details", response.data);
+        // console.log("Current User Details", response.data);
         setUserDetails(response.data.message);
       } catch (error) {
         console.error("Error Getting User Details", error);
@@ -31,12 +31,12 @@ const Twitter: React.FC = () => {
 
   const EditTweet = async (tweetId:string) => {
     try {
-      const response = await newRequest.patch(
+      await newRequest.patch(
         `/tweets/updatetweet/u/${tweetId}`,
         {}, 
        
       );
-      console.log("Edited tweet", response.data);
+      // console.log("Edited tweet", response.data);
       navigate("/createtweet");
     } catch (error) {
       console.error("Error editing tweet", error);
@@ -45,12 +45,12 @@ const Twitter: React.FC = () => {
   
   const DeleteTweet = async (tweetId:string) => {
     try {
-      const response = await newRequest.delete(
+      await newRequest.delete(
         `/tweets/deletetweet/d/${tweetId}`,
         
        
       );
-      console.log("Deleted tweet", response.data);
+      // console.log("Deleted tweet", response.data);
       
     } catch (error) {
       console.error("Error deleting tweet", error);
@@ -63,7 +63,7 @@ const Twitter: React.FC = () => {
       try {
         const response = await newRequest.get("/tweets/alltweets", 
         );
-        console.log("All Tweets", response.data);
+        // console.log("All Tweets", response.data);
         setAllTweets(response.data.data.alltweets); 
       } catch (error) {
         console.error("Error getting all tweets", error);
@@ -84,11 +84,11 @@ const Twitter: React.FC = () => {
   };
    const getLikedTweet=async(tweetId:string)=>{
     try {
-      const response=await newRequest.post(`/likes/toggle/c/${tweetId}`,
+      await newRequest.post(`/likes/toggle/c/${tweetId}`,
         {},
         
       )
-      console.log("Liked tweet",response.data)
+      // console.log("Liked tweet",response.data)
       setLikedTweets(prevLikedTweets => {
       const newTweetLiked=new Set(prevLikedTweets)
       if(newTweetLiked.has(tweetId)){

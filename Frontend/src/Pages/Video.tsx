@@ -21,11 +21,11 @@ const Video: React.FC = () => {
     formData.append("isPublished", isPublished.toString());
 
     try {
-      const response = await formDataRequest.post(
+      await formDataRequest.post(
         `/video/publishvideo`,
         formData,
        )
-      console.log("Video uploaded successfully", response);
+      // console.log("Video uploaded successfully", response);
       navigate("/");
     } catch (error) {
       console.error("Error in video uploading", error);

@@ -30,7 +30,7 @@ const WatchHistoryPage: React.FC = () => {
       try {
         const response = await newRequest.get("/users/history",
          );
-        console.log("API response:", response.data);
+        // console.log("API response:", response.data);
 
         // Set videos state with the array of videos
         setWatchedVideos(response.data.message.watchHistory);
@@ -48,7 +48,7 @@ const WatchHistoryPage: React.FC = () => {
           const response=await newRequest.get("/users/getcurrentuser",
             
           );
-          console.log("Current User Details",response.data)
+          // console.log("Current User Details",response.data)
           SetUserDetails(response.data.message)
         } catch (error) {
           console.error("Error Getting User Detailed",error)

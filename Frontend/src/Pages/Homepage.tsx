@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import Sidebarfull from "../components/Sidebarfull";
-import {newRequest} from "../utils/request.ts"
-
+import { newRequest } from "../utils/request.ts";
 
 // import Cookies from "js-cookie";
 
@@ -15,12 +14,8 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await newRequest.get(
-          "/video",
-          
-          
-        );
-        console.log("API response all videos:", response.data);
+        const response = await newRequest.get("/video");
+        // console.log("API response all videos:", response.data);
         setVideos(response.data.data.data);
       } catch (error) {
         console.error("Error fetching videos:", error);
@@ -33,10 +28,8 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await newRequest.get(
-          "/users/getcurrentuser",
-         );
-        console.log("Current User Details", response.data);
+        const response = await newRequest.get("/users/getcurrentuser");
+        // console.log("Current User Details", response.data);
         SetUserDetails(response.data.message);
       } catch (error) {
         console.error("Error Getting User Detailed", error);

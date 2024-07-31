@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import { Link, useNavigate } from "react-router-dom";
-import {newRequest} from "../utils/request.ts"
-
+import { newRequest } from "../utils/request.ts";
 
 const Signin: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -12,20 +11,12 @@ const Signin: React.FC = () => {
 
   const postSigninData = async () => {
     try {
-      const response = await newRequest.post(
-        "/users/login",
-        {
-          email: email,
-          password: password,
-        },
-      
-      );
-      console.log("Sign-in Successful", response.data);
-      
+      await newRequest.post("/users/login", {
+        email: email,
+        password: password,
+      });
+      // console.log("Sign-in Successful", response.data);
 
-
-     
-      
       navigate("/");
     } catch (error) {
       console.error("Error signing in", error);
@@ -72,7 +63,10 @@ const Signin: React.FC = () => {
           </form>
           <div className="mt-2">
             <p className="font-bold">
-              Don't Have an Account? <Link className="text-gray-500 underline" to="/signup">Sign Up</Link>
+              Don't Have an Account?{" "}
+              <Link className="text-gray-500 underline" to="/signup">
+                Sign Up
+              </Link>
             </p>
           </div>
         </div>

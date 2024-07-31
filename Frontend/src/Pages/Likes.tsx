@@ -28,7 +28,7 @@ const Likes: React.FC = () => {
       try {
         const response = await newRequest.get("/users/getcurrentuser", 
          );
-        console.log("Current User Details", response.data);
+        // console.log("Current User Details", response.data);
         SetUserDetails(response.data.message);
       } catch (error) {
         console.error("Error Getting User Detailed", error);
