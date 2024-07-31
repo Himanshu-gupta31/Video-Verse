@@ -52,7 +52,6 @@ const Dashboard: React.FC = () => {
       try {
         const response = await newRequest.get("/dashboard/dashboard/videos");
         if (response.data.data.statusCode === 410) {
-          setError(response.data.data.message.message);
           setTotalVideos([]);
           setVideoIds([]);
         } else {
