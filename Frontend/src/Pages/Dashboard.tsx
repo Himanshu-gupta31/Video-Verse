@@ -74,7 +74,12 @@ const Dashboard: React.FC = () => {
           const response = await newRequest.get(
             `/subscribe/getchannel/sub/${channelId}`
           );
-          setTotalSubs(response.data.data.numberOfSubscribers);
+          // Calculate the total number of subscribers
+          const totalSubscriberCount = response.data.data.subscriber.reduce(
+            (acc: number, subscriber: any) => acc + subscriber.subs,
+            0
+          );
+          setTotalSubs(totalSubscriberCount);
         }
       } catch (error) {
         console.error("Error fetching Channel Subscriber", error);
