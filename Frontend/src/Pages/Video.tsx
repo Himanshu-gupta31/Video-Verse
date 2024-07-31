@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { baseUrl } from "../main";
+import { formDataRequest } from "../utils/requestForFormData";
 
 const Video: React.FC = () => {
   const [title, SetTitle] = useState("");
@@ -22,14 +22,10 @@ const Video: React.FC = () => {
     formData.append("isPublished", isPublished.toString());
 
     try {
-      const response = await axios.post(
-        `${baseUrl}/api/v1/users/register`,
+      const response = await formDataRequest.post(
+        `${baseUrl}/video/publishvideo`,
         formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+       )
       console.log("Video uploaded successfully", response);
       navigate("/");
     } catch (error) {
