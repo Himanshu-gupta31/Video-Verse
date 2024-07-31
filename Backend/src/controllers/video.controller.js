@@ -64,6 +64,7 @@ const publishVideo = asyncHandler(async (req, res) => {
   console.log(title);
   console.log(description);
   console.log(req.body);
+  console.log(req.files)
   if (!title || title.length === 0) {
     throw new Apierror(400, "Title field cannot be empty");
   }
