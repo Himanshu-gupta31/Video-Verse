@@ -21,12 +21,12 @@ const Signin: React.FC = () => {
       
       );
       console.log("Sign-in Successful", response.data);
-      const { accesstoken, refreshtoken } = response.data.message;
+      
 
 
       // Set the JWT token cookie using js-cookie
-      Cookies.set("accesstoken", accesstoken);
-      Cookies.set("refreshtoken", refreshtoken);
+      Cookies.set("accesstoken", response.data.message.accesstoken);
+      Cookies.set("refreshtoken", response.data.message.refreshtoken );
 
       // Set the JWT token cookie using js-cookie
       
