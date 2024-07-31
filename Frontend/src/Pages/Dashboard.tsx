@@ -14,7 +14,7 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<null | string>(null);
   const [channelId, setChannelId] = useState<string>("");
-  console.log(videoIds)
+  console.log(videoIds);
   // useEffect(() => {
   //   const fetchTotalViews = async () => {
   //     try {
@@ -57,7 +57,9 @@ const Dashboard: React.FC = () => {
           setVideoIds([]);
         } else {
           setTotalVideos(response.data.data.channelVideo);
-          setVideoIds(response.data.data.channelVideo.map((video: any) => video._id));
+          setVideoIds(
+            response.data.data.channelVideo.map((video: any) => video._id)
+          );
         }
       } catch (error) {
         console.error("Error Fetching Total Videos", error);
@@ -74,12 +76,19 @@ const Dashboard: React.FC = () => {
           const response = await newRequest.get(
             `/subscribe/getchannel/sub/${channelId}`
           );
-          // Calculate the total number of subscribers
-          const totalSubscriberCount = response.data.data.subscriber.reduce(
-            (acc: number, subscriber: any) => acc + subscriber.subs,
-            0
-          );
-          setTotalSubs(totalSubscriberCount);
+          if (
+            response.data.data.subscriber &&
+            response.data.data.subscriber.length > 0
+          ) {
+            // Calculate the total number of subscribers
+            const totalSubscriberCount = response.data.data.subscriber.reduce(
+              (acc: number, subscriber: any) => acc + subscriber.subs,
+              0
+            );
+            setTotalSubs(totalSubscriberCount);
+          } else {
+            setTotalSubs(0);
+          }
         }
       } catch (error) {
         console.error("Error fetching Channel Subscriber", error);
@@ -193,7 +202,7 @@ const Dashboard: React.FC = () => {
                   <DashboardComponent heading="Total Videos" />
                   <p>{totalVideos.length > 0 ? totalVideos.length : 0}</p>
                 </div>
-{/* 
+                {/* 
                 <div className="w-[16rem] h-[6rem] border border-white text-center mt-8 text-white">
                   <DashboardComponent heading="Total Views" />
                   <p>{totalViews}</p>
