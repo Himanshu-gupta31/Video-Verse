@@ -51,7 +51,7 @@ const Dashboard: React.FC = () => {
     const getChannelTotalVideos = async () => {
       try {
         const response = await newRequest.get(
-          "/dashboard/dashboard/videos"
+          "/dashboard/videos"
         );
         // console.log("Total Videos", response.data);
         setTotalVideos(response.data.data.channelVideo);

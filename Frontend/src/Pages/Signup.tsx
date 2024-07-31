@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 const Signup: React.FC = () => {
   const [fullname, setFullname] = useState("");
@@ -12,9 +12,11 @@ const Signup: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [avatar, setAvatar] = useState<File | null>(null);
   const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const postSignUpData = async () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("fullname", fullname);
     formData.append("username", username);
@@ -33,21 +35,20 @@ const Signup: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(
-        'https://video-verse-4.onrender.com/api/v1/users/register',
+      await axios.post(
+        "https://video-verse-4.onrender.com/api/v1/users/register",
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
           withCredentials: true,
         }
       );
-      
-      console.log("Sign-up successful:", response.data);
- 
 
-      navigate("/signin");
+      // console.log("Sign-up successful:", response.data);
+      setLoading(false);
+      navigate("/");
       // Handle successful sign-up (e.g., redirect to login page)
     } catch (error: any) {
       console.error("Error signing up!", error);
@@ -65,6 +66,7 @@ const Signup: React.FC = () => {
 
   return (
     <div className="bg-black text-white flex justify-center items-center h-screen">
+      {loading && <LoadingSpinner />}
       <div className="p-8 bg-black border border-white h-fit shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105 max-sm:w-[90%]">
         <h1 className="text-white text-2xl text-center mb-4">Sign Up</h1>
         <form

@@ -2,21 +2,24 @@ import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import { Link, useNavigate } from "react-router-dom";
 import { newRequest } from "../utils/request.ts";
+import { LoadingSpinner } from "../components/LoadingSpinner.tsx";
 
 const Signin: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading,setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const postSigninData = async () => {
     try {
+      setLoading(true)
       await newRequest.post("/users/login", {
         email: email,
         password: password,
       });
       // console.log("Sign-in Successful", response.data);
-
+      setLoading(false)
       navigate("/");
     } catch (error) {
       console.error("Error signing in", error);
@@ -31,6 +34,7 @@ const Signin: React.FC = () => {
 
   return (
     <div>
+      {loading && <LoadingSpinner />}
       <div className="bg-black text-white flex justify-center items-center h-screen">
         <div className="p-8 bg-black border border-white h-1/2 shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105 max-sm:w-[85%]">
           <h1 className="text-white text-2xl text-center mb-4">Sign In</h1>
