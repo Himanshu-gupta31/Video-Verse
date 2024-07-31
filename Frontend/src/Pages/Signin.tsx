@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import { Link, useNavigate } from "react-router-dom";
 import {newRequest} from "../utils/request.ts"
-import Cookies from "js-cookie";
+
 
 const Signin: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -24,12 +24,7 @@ const Signin: React.FC = () => {
       
 
 
-      const { accesstoken, refreshtoken } = response.data.message;
-
-      // Set the JWT token cookie using js-cookie
-      Cookies.set("accesstoken", accesstoken, { expires: 1, path: "/", secure: true, sameSite: 'None' });
-      Cookies.set("refreshtoken", refreshtoken, { expires: 10, path: "/", secure: true, sameSite: 'None' });
-      // Set the JWT token cookie using js-cookie
+     
       
       navigate("/");
     } catch (error) {
