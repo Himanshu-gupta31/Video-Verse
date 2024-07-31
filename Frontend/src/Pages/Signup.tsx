@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { formDataRequest } from "../utils/requestForFormData";
 
 const Signup: React.FC = () => {
   const [fullname, setFullname] = useState("");
@@ -32,14 +32,9 @@ const Signup: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(
-        "https://video-verse-4.onrender.com/api/v1/users/register",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+      const response = await formDataRequest.post(
+        "/users/register",
+        formData
       );
       console.log("Sign-up successful:", response.data);
  
