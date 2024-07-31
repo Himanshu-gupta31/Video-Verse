@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import {newRequest} from "../utils/request.ts"
-import Cookies from "js-cookie";
+
 
 const Sidebarfull: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,8 +19,7 @@ const Sidebarfull: React.FC = () => {
         {},
         
       );
-      Cookies.remove("accesstoken");
-      Cookies.remove("refreshtoken");
+     
       console.log("Logout Successfully", response.data);
       navigate("/signin");
     } catch (error) {

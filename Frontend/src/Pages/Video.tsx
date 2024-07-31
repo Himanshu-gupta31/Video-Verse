@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import { useNavigate } from "react-router-dom";
-import { baseUrl } from "../main";
 import { formDataRequest } from "../utils/requestForFormData";
 
 const Video: React.FC = () => {
@@ -23,7 +22,7 @@ const Video: React.FC = () => {
 
     try {
       const response = await formDataRequest.post(
-        `${baseUrl}/video/publishvideo`,
+        `/video/publishvideo`,
         formData,
        )
       console.log("Video uploaded successfully", response);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { InputBox } from "../components/InputBox";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { baseUrl } from "../main";
+
 
 const Signup: React.FC = () => {
   const [fullname, setFullname] = useState("");
@@ -34,7 +34,7 @@ const Signup: React.FC = () => {
 
     try {
       const response = await axios.post(
-        `${baseUrl}/api/v1/users/register`,
+        `https://video-verse-4.onrender.com/api/v1/users/register`,
         formData,
         {
           headers: {
