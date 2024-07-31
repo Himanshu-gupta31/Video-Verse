@@ -1,5 +1,5 @@
 import axios from "axios";
-import Cookies from "js-cookie";
+
 
 
 export const newRequest = axios.create({
@@ -7,6 +7,6 @@ export const newRequest = axios.create({
   withCredentials: true,
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
-    Authorization: `Bearer ${Cookies.get("accesstoken")}`,
+    // Authorization: `Bearer ${Cookies.get("accesstoken")}`,
   },
 });
