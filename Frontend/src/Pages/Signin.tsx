@@ -31,10 +31,15 @@ const Signin: React.FC = () => {
     e.preventDefault();
     postSigninData();
   };
-
+  if (loading)
+    return (
+      <div className="opacity-50 h-screen w-screen flex justify-center items-center">
+        <LoadingSpinner />;
+      </div>
+    );
   return (
     <div>
-      {loading && <LoadingSpinner />}
+      
       <div className="bg-black text-white flex justify-center items-center h-screen">
         <div className="p-8 bg-black border border-white h-1/2 shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105 max-sm:w-[85%]">
           <h1 className="text-white text-2xl text-center mb-4">Sign In</h1>
