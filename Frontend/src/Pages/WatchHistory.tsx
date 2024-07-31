@@ -5,21 +5,21 @@ import {newRequest} from "../utils/request.ts"
 
 // import Cookies from "js-cookie";
 
-function formatDate(isoDateString:string) {
-    const date = new Date(isoDateString);
+// function formatDate(isoDateString:string) {
+//     const date = new Date(isoDateString);
 
-    const padZero = (num:any) => (num < 10 ? '0' : '') + num;
+//     const padZero = (num:any) => (num < 10 ? '0' : '') + num;
 
-    const day = padZero(date.getUTCDate());
-    const month = padZero(date.getUTCMonth() + 1); // Months are zero-based
-    const year = date.getUTCFullYear().toString().slice(-2); // Get last two digits of the year
+//     const day = padZero(date.getUTCDate());
+//     const month = padZero(date.getUTCMonth() + 1); // Months are zero-based
+//     const year = date.getUTCFullYear().toString().slice(-2); // Get last two digits of the year
 
-    const hours = padZero(date.getUTCHours());
-    const minutes = padZero(date.getUTCMinutes());
-    const seconds = padZero(date.getUTCSeconds());
+//     const hours = padZero(date.getUTCHours());
+//     const minutes = padZero(date.getUTCMinutes());
+//     const seconds = padZero(date.getUTCSeconds());
 
-    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-}
+//     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+// }
 
 const WatchHistoryPage: React.FC = () => {
   const [watchedVideos, setWatchedVideos] = useState<any[]>([]);
@@ -121,7 +121,7 @@ const WatchHistoryPage: React.FC = () => {
                 />
                 <h3 className="text-white text-lg font-bold">{video.title}</h3>
                 <p className="text-gray-400">{video.description}</p>
-                <p className="text-gray-400">Watched On {formatDate(video.createdAt)}</p>
+                {/* <p className="text-gray-400">Watched On {formatDate(video.createdAt)}</p> */}
               </Link>
             ))}
           </div>
