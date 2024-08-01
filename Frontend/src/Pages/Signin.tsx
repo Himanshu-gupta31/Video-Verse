@@ -20,6 +20,7 @@ const Signin: React.FC = () => {
       });
       navigate("/");
     } catch (error) {
+      setLoading(false)
       console.error("Error signing in", error);
       setError("Invalid credentials, Sign-in Failed");
     } finally {
