@@ -14,7 +14,7 @@ const Signup: React.FC = () => {
   const [coverImage, setCoverImage] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-
+  
   const postSignUpData = async () => {
     setLoading(true);
     const formData = new FormData();
@@ -22,18 +22,19 @@ const Signup: React.FC = () => {
     formData.append("username", username);
     formData.append("password", password);
     formData.append("email", email);
-
+  
     if (!avatar) {
       setError("Avatar is required");
+      setLoading(false); // Ensure the loader is stopped if avatar is missing
       return;
     } else {
       formData.append("avatar", avatar);
     }
-
+  
     if (coverImage) {
       formData.append("coverimage", coverImage);
     }
-
+  
     try {
       await axios.post(
         "https://video-verse-4.onrender.com/api/v1/users/register",
@@ -45,33 +46,33 @@ const Signup: React.FC = () => {
           withCredentials: true,
         }
       );
-
-      // console.log("Sign-up successful:", response.data);
-      setLoading(false);
+  
+      // Handle successful sign-up (e.g., redirect to home page)
       navigate("/");
-      // Handle successful sign-up (e.g., redirect to login page)
     } catch (error: any) {
       console.error("Error signing up!", error);
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
+      if (error.response && error.response.data && error.response.data.message) {
         setError(error.response.data.message);
       } else {
         setError("Error signing up! Please try again later.");
       }
+    } finally {
+      setLoading(false); // Ensure the loader is stopped after the request completes
     }
   };
+  
+
+
   if (loading)
     return (
       <div className="opacity-50 h-screen w-screen flex justify-center items-center">
         <LoadingSpinner />;
       </div>
     );
+
+
   return (
     <div className="bg-black text-white flex justify-center items-center h-screen">
-      
       <div className="p-8 bg-black border border-white h-fit shadow-md rounded-lg transform transition-x-full w-[44%] duration-500 hover:scale-105 max-sm:w-[90%]">
         <h1 className="text-white text-2xl text-center mb-4">Sign Up</h1>
         <form
